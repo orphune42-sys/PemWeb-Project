@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-card">
+        <div class="login-header">
+            <h2>Login</h2>
+            <p>Silakan masukkan akun Anda</p>
+        </div>
+        
+
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Masukkan email" required autocomplete="email">
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Masukkan password" required autocomplete="current-password">
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="showPassword">
+                <label for="showPassword">Tampilkan password</label>
+            </div>
+
+            <button type="submit" class="btn-submit">Login</button>
+
+            <div id="message" class="message"></div>
+        </form>
+
+        <div class="login-footer">
+            <small>Belum punya akun? <a href="#">Register</a></small>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
