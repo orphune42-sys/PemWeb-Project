@@ -268,9 +268,9 @@ body {
 
 .alert-toast.success,
 .alert-toast.show.success {
-    background-color: #ecfdf5 !important; /* Warna latar hijau soft */
-    color: #065f46 !important;            /* Warna teks hijau gelap */
-    border: 1.5px solid #a7f3d0 !important; /* Garis tepi hijau */
+    background-color: #ecfdf5 !important; 
+    color: #065f46 !important;            
+    border: 1.5px solid #a7f3d0 !important;
     border-radius: 10px;
     height: 46px;
     text-align: center;

@@ -114,11 +114,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="auth-right">
             <div id="alertToast" class="alert-toast <?= !empty($serverMessage) ? ($serverSuccess ? 'show success' : 'show error') : '' ?>">
-                <!-- <span class="toast-icon" id="toastIcon">
-                    <?php if (!empty($serverMessage)): ?>
-                        <?= $serverSuccess ? '✓' : '!' ?>
-                    <?php endif; ?>
-                </span> -->
                 <span class="toast-text" id="toastText"><?= htmlspecialchars($serverMessage) ?></span>
             </div>
             <form id="loginForm" method="POST" action="login.php" novalidate>
