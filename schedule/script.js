@@ -149,19 +149,16 @@ const inputDescription = document.getElementById('inputDescription');
         const startIndex = (currentPage - 1) * pageSize;
         const endIndex = Math.min(startIndex + pageSize, total);
 
-        // Hide all rows first
         allRows.forEach(row => {
             row.style.display = 'none';
         });
 
-        // Show only rows for current page
         for (let i = startIndex; i < endIndex; i++) {
             if (filteredRows[i]) {
                 filteredRows[i].style.display = '';
             }
         }
 
-        // Check if no rows matched
         let emptyNotice = document.getElementById('emptyFilterRow');
         if (total === 0) {
             if (!emptyNotice) {
@@ -175,7 +172,6 @@ const inputDescription = document.getElementById('inputDescription');
             emptyNotice.style.display = 'none';
         }
 
-        // Update range and badge text
         if (pageRangeText) {
             pageRangeText.textContent = total > 0 ? `${startIndex + 1}-${endIndex}` : '0';
         }
@@ -209,9 +205,7 @@ const inputDescription = document.getElementById('inputDescription');
         };
         paginationControls.appendChild(prevBtn);
 
-        // Page Numbers
         for (let p = 1; p <= totalPages; p++) {
-            // Simple pagination display: first, last, current, adjacent
             if (p === 1 || p === totalPages || (p >= currentPage - 1 && p <= currentPage + 1)) {
                 const pageBtn = document.createElement('button');
                 pageBtn.type = 'button';
@@ -234,7 +228,6 @@ const inputDescription = document.getElementById('inputDescription');
             }
         }
 
-        // Next Button
         const nextBtn = document.createElement('button');
         nextBtn.type = 'button';
         nextBtn.className = 'btn-page';
@@ -253,20 +246,16 @@ const inputDescription = document.getElementById('inputDescription');
     if (filterCategory) filterCategory.addEventListener('change', applyFilters);
     if (filterDateRange) filterDateRange.addEventListener('input', applyFilters);
 
-    // Initial table render
     applyFilters();
 
-    // ----------------------------------------------------
-    // Calendar Management (Lomba & Jadwal)
-    // ----------------------------------------------------
     const calendarGrid = document.getElementById('calendarGrid');
     const calMonthTitle = document.getElementById('calMonthTitle');
     const btnPrevMonth = document.getElementById('btnPrevMonth');
     const btnNextMonth = document.getElementById('btnNextMonth');
 
-    // Default to October 2026 to match Pic 1 and Pic 2!
+
     let calYear = 2026;
-    let calMonth = 9; // 0-based: 9 = October
+    let calMonth = 9; 
 
     const monthNamesIndo = [
         'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -284,27 +273,21 @@ const inputDescription = document.getElementById('inputDescription');
     function renderCalendar() {
         if (!calendarGrid || !calMonthTitle) return;
 
-        // Month heading title
         calMonthTitle.textContent = `${monthNamesIndo[calMonth]} ${calYear}`;
 
         calendarGrid.innerHTML = '';
 
-        // Schedules data from PHP initialSchedules array
         const schedulesList = (typeof initialSchedules !== 'undefined' && Array.isArray(initialSchedules))
             ? initialSchedules
             : [];
 
-        // Month calculations
-        // First day of current month:
         const firstDayObj = new Date(calYear, calMonth, 1);
-        let firstDayOfWeek = firstDayObj.getDay(); // 0 = Sun, 1 = Mon, ..., 6 = Sat
-        // Convert to Monday = 0:
+        let firstDayOfWeek = firstDayObj.getDay(); 
         firstDayOfWeek = (firstDayOfWeek === 0) ? 6 : firstDayOfWeek - 1;
 
         const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
         const daysInPrevMonth = new Date(calYear, calMonth, 0).getDate();
 
-        // 1. Previous month padding days
         for (let i = firstDayOfWeek - 1; i >= 0; i--) {
             const dayNum = daysInPrevMonth - i;
             const prevMonthIndex = calMonth === 0 ? 11 : calMonth - 1;
@@ -315,7 +298,6 @@ const inputDescription = document.getElementById('inputDescription');
             calendarGrid.appendChild(cell);
         }
 
-        // 2. Current month days
         const today = new Date();
         const isCurrentMonthReal = (today.getFullYear() === calYear && today.getMonth() === calMonth);
 
@@ -327,7 +309,6 @@ const inputDescription = document.getElementById('inputDescription');
             calendarGrid.appendChild(cell);
         }
 
-        // 3. Next month padding days to complete grid (total multiple of 7)
         const totalRendered = firstDayOfWeek + daysInMonth;
         const remainingCells = (totalRendered % 7 === 0) ? 0 : 7 - (totalRendered % 7);
 

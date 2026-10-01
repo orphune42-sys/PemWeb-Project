@@ -25,7 +25,6 @@ body {
     max-width: 1240px;
 }
 
-/* ---------------- Top Header ---------------- */
 .top-header {
     display: flex;
     align-items: center;
@@ -116,7 +115,6 @@ body {
     color: #64748b;
 }
 
-/* ---------------- Toast Notification ---------------- */
 .toast-alert {
     display: none;
     padding: 12px 18px;
@@ -142,7 +140,6 @@ body {
     border: 1px solid #fecaca;
 }
 
-/* ---------------- Welcome / Hero ---------------- */
 .welcome-section {
     margin-bottom: 22px;
 }
@@ -160,7 +157,6 @@ body {
     font-weight: 400;
 }
 
-/* ---------------- Filter & Action Toolbar ---------------- */
 .toolbar-section {
     display: flex;
     align-items: center;
@@ -274,7 +270,6 @@ body {
     background-color: #2f7990;
 }
 
-/* ---------------- Content Card ---------------- */
 .content-card {
     background-color: #ffffff;
     border: 1px solid #edf2f7;
@@ -470,7 +465,6 @@ body {
     font-size: 14px;
 }
 
-/* ---------------- Pagination Footer ---------------- */
 .table-pagination-footer {
     display: flex;
     align-items: center;
@@ -524,7 +518,6 @@ body {
     cursor: not-allowed;
 }
 
-/* ---------------- Calendar Section ---------------- */
 .calendar-card {
     padding-bottom: 24px;
 }
@@ -698,7 +691,6 @@ body {
     font-weight: 500;
 }
 
-/* ---------------- Modal Dialog ---------------- */
 .modal-overlay {
     display: none;
     position: fixed;
@@ -805,9 +797,7 @@ body {
     color: #64748b;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.form-group input,.form-group select,.form-group textarea {
     padding: 9px 12px;
     border: 1.5px solid #d1d5db;
     border-radius: 6px;
@@ -865,7 +855,6 @@ body {
     background-color: #2f7990;
 }
 
-/* ---------------- Responsive ---------------- */
 @media (max-width: 900px) {
     .main-content {
         padding: 20px 16px;
