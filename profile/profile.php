@@ -16,8 +16,8 @@ if (!empty($users)) {
     }
 }
 
-$name       = $user['name'] ?? 'lilyangeli';
-$email      = $user['email'] ?? 'abc@gmail.com';
+$name       = $user['name'] ?? 'Nadhira Rindra';
+$email      = $user['email'] ?? 'nadhirarindra@ub.ac.id';
 $phone      = $user['phone'] ?? '081234567890';
 $address    = $user['address'] ?? 'Jl. Melati No. 12, Malang';
 $birthDate  = $user['birth_date'] ?? '12 Mei 2000';
