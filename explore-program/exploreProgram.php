@@ -85,27 +85,6 @@ $programs = [
 <body>
     <div class="dashboard-container">
         <aside class="sidebar">
-            <!-- <div class="brand-logo">
-                <img src="../assets/LOGO.png" alt="FindYourPath Logo" class="logo-img" onerror="this.outerHTML='<div class=\'logo-fallback\'><span class=\'logo-icon\'>FYP</span><div><strong>FindYour<span>Path</span></strong><br><small>Student Career & Achievement</small></div></div>'">
-            </div> -->
-
-            <!-- <nav class="sidebar-nav">
-                <a href="#" class="nav-item">
-                    Dashboard
-                </a>
-                <a href="#" class="nav-item active">
-                    Explore Program
-                </a>
-                <a href="#" class="nav-item">
-                    Applications
-                </a>
-                <a href="#" class="nav-item">
-                    Find Opportunities
-                </a>
-                <a href="#" class="nav-item">
-                    Profile
-                </a>
-            </nav> -->
             <?php
             $activeMenu = 'explore-program'; 
             $basePath = '../';

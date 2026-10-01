@@ -30,5 +30,13 @@
         "username": "adminimup",
         "password": "$2y$10$GLtsTvnwwdKC5ttszxPMfusBdUkAp3JU2GJq\/ZyDdda\/mAiSUOTSW",
         "created_at": "2026-09-30 15:29:15"
+    },
+    {
+        "id": "usr_8901262b94f4",
+        "name": "coco",
+        "email": "coco@gmail.com",
+        "username": "cocoimup",
+        "password": "$2y$10$zG8GSQDt\/UYYlXrJqNWSnexOg9EIwkZeYz3hVKlBBlj7TNRrdIt9i",
+        "created_at": "2026-10-01 07:49:51"
     }
 ]
