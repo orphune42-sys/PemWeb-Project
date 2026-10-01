@@ -165,14 +165,13 @@ if ($editSkillIndex >= 0 && isset($profile["skills"][$editSkillIndex])) {
 
     <nav class="sidebar-menu">
         <a href="index.php"><span>▦</span>Dashboard</a>
-        <a href="explore-program.php"><span>⌕</span>Explore Program</a>
+        <a href="../explore-program/exploreProgram.php"><span>⌕</span>Explore Program</a>
         <a href="form-pendaftaran.php"><span>▤</span>Applications</a>
         <a href="find-opportunities.php"><span>✦</span>Find Opportunities</a>
         <a href="profile_user.php" class="active"><span>♙</span>Profile</a>
     </nav>
 
     <div class="sidebar-bottom">
-        <a href="#">⚙ Settings</a>
         <a href="#">↪ Logout</a>
     </div>
 

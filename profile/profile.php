@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php 
             $activeMenu = 'profile'; 
             $basePath = '../';
-            include __DIR__ . '/../sidebarAdmin/sidebar.php'; 
+            include '../sidebarAdmin/sidebar.php'; 
         ?>
 
     <div class="main-content">
@@ -291,7 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <script src="../sidebarAdmin/script.js"></script>
+    <script src="../sidebar/script.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
