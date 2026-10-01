@@ -1,0 +1,178 @@
+[
+    {
+        "id": "sch_01",
+        "title": "Program Beasiswa Talenta Digital Indonesia untuk Pemimpin T...",
+        "category": "Beasiswa",
+        "status": "Aktif",
+        "start_date": "2026-10-12",
+        "end_date": "2026-10-30",
+        "event_date": "2026-10-15",
+        "location": "KEMKOMDIGI",
+        "description": "Program beasiswa akselerasi talenta muda di bidang teknologi dan kepemimpinan digital."
+    },
+    {
+        "id": "sch_02",
+        "title": "Kompetisi Nasional Perencanaan Bisnis Berkelanjutan dan Ino...",
+        "category": "Lomba",
+        "status": "Aktif",
+        "start_date": "2026-10-30",
+        "end_date": "2026-11-12",
+        "event_date": "2026-10-30",
+        "location": "UGM",
+        "description": "Kompetisi business plan tingkat nasional untuk menggali ide usaha inovatif dan ramah lingkungan."
+    },
+    {
+        "id": "sch_03",
+        "title": "Beasiswa BCA Finance Peduli 2026 Batch 1",
+        "category": "Beasiswa",
+        "status": "Akan Datang",
+        "start_date": "2026-11-02",
+        "end_date": "2026-11-24",
+        "event_date": "2026-11-02",
+        "location": "BCA",
+        "description": "Bantuan dana pendidikan dan pelatihan kepemimpinan eksklusif dari BCA Finance."
+    },
+    {
+        "id": "sch_04",
+        "title": "Lomba Karya Tulis Ilmiah Nasional: Transisi Energi untuk Indo...",
+        "category": "Lomba",
+        "status": "Aktif",
+        "start_date": "2026-11-15",
+        "end_date": "2026-12-05",
+        "event_date": "2026-11-15",
+        "location": "ITB",
+        "description": "Ajang penulisan karya ilmiah mahasiswa dalam rangka mendorong transisi energi bersih di Indonesia."
+    },
+    {
+        "id": "sch_05",
+        "title": "Hackathon Solusi Kota Cerdas untuk Pelayanan Publik yang In...",
+        "category": "Lomba",
+        "status": "Selesai",
+        "start_date": "2026-09-01",
+        "end_date": "2026-09-18",
+        "event_date": "2026-09-18",
+        "location": "JSC",
+        "description": "Pengembangan prototipe aplikasi cerdas pemecah masalah perkotaan selama 48 jam nonstop."
+    },
+    {
+        "id": "sch_06",
+        "title": "UI\/UX Design Competition",
+        "category": "Lomba",
+        "status": "Aktif",
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-18",
+        "event_date": "2026-10-01",
+        "location": "Online",
+        "description": "Kompetisi desain pengalaman pengguna produk digital berfokus pada inklusivitas."
+    },
+    {
+        "id": "sch_07",
+        "title": "Workshop AI + Education",
+        "category": "Workshop",
+        "status": "Aktif",
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-03",
+        "event_date": "2026-10-03",
+        "location": "Online",
+        "description": "Pelatihan pemanfaatan generative AI untuk menunjang produktivitas akademik mahasiswa."
+    },
+    {
+        "id": "sch_08",
+        "title": "Webinar Karir",
+        "category": "Workshop",
+        "status": "Aktif",
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-04",
+        "event_date": "2026-10-04",
+        "location": "Online",
+        "description": "Sharing session bersama para profesional teknologi tentang tips membangun karir impian."
+    },
+    {
+        "id": "sch_09",
+        "title": "Lomba Inovasi Teknologi",
+        "category": "Lomba",
+        "status": "Aktif",
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-10",
+        "event_date": "2026-10-05",
+        "location": "Gedung A, UB",
+        "description": "Kompetisi inovasi hardware dan software IoT untuk industri berkelanjutan."
+    },
+    {
+        "id": "sch_10",
+        "title": "Bimbingan Peserta",
+        "category": "Workshop",
+        "status": "Aktif",
+        "start_date": "2026-10-05",
+        "end_date": "2026-10-08",
+        "event_date": "2026-10-08",
+        "location": "Ruang Seminar UB",
+        "description": "Sesi mentoring intensif bersama mentor industri sebelum babak pitching."
+    },
+    {
+        "id": "sch_11",
+        "title": "Sosialisasi Beasiswa",
+        "category": "Beasiswa",
+        "status": "Aktif",
+        "start_date": "2026-10-05",
+        "end_date": "2026-10-12",
+        "event_date": "2026-10-12",
+        "location": "Online",
+        "description": "Informasi tata cara pendaftaran, syarat berkas, dan tips lolos seleksi beasiswa."
+    },
+    {
+        "id": "sch_12",
+        "title": "Seleksi Administrasi",
+        "category": "Beasiswa",
+        "status": "Aktif",
+        "start_date": "2026-10-12",
+        "end_date": "2026-10-15",
+        "event_date": "2026-10-15",
+        "location": "KEMKOMDIGI",
+        "description": "Verifikasi dan validasi kelengkapan berkas seluruh pendaftar program beasiswa."
+    },
+    {
+        "id": "sch_13",
+        "title": "Pengumuman Finalis",
+        "category": "Lomba",
+        "status": "Aktif",
+        "start_date": "2026-10-10",
+        "end_date": "2026-10-18",
+        "event_date": "2026-10-18",
+        "location": "ITB",
+        "description": "Publikasi daftar 10 tim terbaik yang lolos ke tahap babak final presentasi."
+    },
+    {
+        "id": "sch_14",
+        "title": "Pengumuman Pemenang",
+        "category": "Lomba",
+        "status": "Aktif",
+        "start_date": "2026-10-18",
+        "end_date": "2026-10-22",
+        "event_date": "2026-10-22",
+        "location": "JSC",
+        "description": "Penyerahan medali, sertifikat, dan awarding untuk pemenang hackathon kota cerdas."
+    },
+    {
+        "id": "sch_15",
+        "title": "Program Pertukaran Pelajar",
+        "category": "Beasiswa",
+        "status": "Akan Datang",
+        "start_date": "2026-10-15",
+        "end_date": "2026-10-31",
+        "event_date": "2026-10-25",
+        "location": "Universitas Gadjah Mada",
+        "description": "Program mobilitas mahasiswa untuk mengikuti perkuliahan satu semester di universitas mitra."
+    },
+    {
+        "id": "sch_16",
+        "title": "Event Utama",
+        "category": "Lomba",
+        "status": "Aktif",
+        "start_date": "2026-10-28",
+        "end_date": "2026-10-30",
+        "event_date": "2026-10-30",
+        "location": "UGM",
+        "description": "Puncak acara kompetisi nasional dan pameran inovasi karya mahasiswa."
+    }
+]

@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../sidebar/style.css">
+    <link rel="stylesheet" href="../sidebarAdmin/style.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php 
             $activeMenu = 'profile'; 
             $basePath = '../';
-            include '../sidebar/sidebar.php'; 
+            include __DIR__ . '/../sidebarAdmin/sidebar.php'; 
         ?>
 
     <div class="main-content">
@@ -291,7 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <script src="../sidebar/script.js"></script>
+    <script src="../sidebarAdmin/script.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
