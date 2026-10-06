@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
     tableActions.forEach(btn => {
         btn.addEventListener('click', function () {
             const actionType = this.getAttribute('title');
-            const userName = this.closest('tr').querySelector('.user-name').innerText;
+            const userName = this.closest('tr').querySel ector('.user-name').innerText;
             console.log(`Menjalankan aksi "${actionType}" untuk pendaftar: ${userName}`);
         });
     });
