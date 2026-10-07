@@ -74,7 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="layout-wrapper">
-        <?php 
+       
+       <?php 
             $activeMenu = 'profile'; 
             $basePath = '../';
             include '../sidebarAdmin/sidebar.php'; 
