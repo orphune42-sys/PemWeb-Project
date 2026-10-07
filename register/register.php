@@ -61,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'email' => $email,
                 'username' => $username,
                 'password' => password_hash($password, PASSWORD_DEFAULT),
+                'role' => 'mahasiswa',
                 'created_at' => date('Y-m-d H:i:s')
             ];
 
@@ -92,9 +93,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - FindYourPath</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -199,7 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
 
             <div class="auth-footer">
-                <small>Sudah punya akun? <a href="../Login/login.php">Login</a></small>
+                <small>Sudah punya akun? <a href="../login.php">Login</a></small>
             </div>
         </div>
     </div>

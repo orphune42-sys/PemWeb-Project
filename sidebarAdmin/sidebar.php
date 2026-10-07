@@ -55,7 +55,7 @@ $menuItems = [
     </nav>
 
     <div class="sidebar-footer">
-        <a href="<?= htmlspecialchars($basePath) ?>login/login.php" class="nav-link logout-link">
+        <a href="<?= htmlspecialchars($basePath) ?>logout.php" class="nav-link logout-link">
         <span class="nav-title">Keluar</span>
         </a>
     </div>

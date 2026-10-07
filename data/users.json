@@ -5,6 +5,7 @@
         "email": "budi@example.com",
         "username": "budisantoso",
         "password": "$2y$10$fNdKLtuT\/gMjeBtbFA9Ez.xLZ\/6e8JF5ci5x.5RWmzCRuwfKOVwS.",
+        "role": "mahasiswa",
         "created_at": "2026-09-30 12:00:00"
     },
     {
@@ -13,6 +14,7 @@
         "email": "siti@example.com",
         "username": "sitirahma",
         "password": "$2y$10$P6TPNhyDpWjc33V20q4QQe3C\/BHhzupqGA5es2AoDp6Zf3YPM66sS",
+        "role": "mahasiswa",
         "created_at": "2026-09-30 12:05:32"
     },
     {
@@ -21,6 +23,7 @@
         "email": "hafshah@gmail.com",
         "username": "hfsnaii",
         "password": "$2y$10$ZGRXh2jYKjZ7\/Ry5Pv5KBOaOgHGzSwfhsA8OzTFnLyrdkoZsSDFE.",
+        "role": "mahasiswa",
         "created_at": "2026-09-30 15:15:17"
     },
     {
@@ -29,6 +32,7 @@
         "email": "admin@gmail.com",
         "username": "adminimup",
         "password": "$2y$10$GLtsTvnwwdKC5ttszxPMfusBdUkAp3JU2GJq\/ZyDdda\/mAiSUOTSW",
+        "role": "admin",
         "created_at": "2026-09-30 15:29:15"
     },
     {
@@ -37,6 +41,34 @@
         "email": "coco@gmail.com",
         "username": "cocoimup",
         "password": "$2y$10$zG8GSQDt\/UYYlXrJqNWSnexOg9EIwkZeYz3hVKlBBlj7TNRrdIt9i",
+        "role": "admin",
         "created_at": "2026-10-01 07:49:51"
+    },
+    {
+        "id": "usr_ef7e9d07687e",
+        "name": "admin fyp",
+        "email": "adminfyp@gmail.com",
+        "username": "admin_fyp",
+        "password": "$2y$10$pFLvaUaRwNbwpkEscaAY9OLt.ZEjjqDX9CG6y7TIFwTHsc63\/E.Hq",
+        "role": "mahasiswa",
+        "created_at": "2026-10-07 08:25:48"
+    },
+    {
+        "id": "usr_372d20a3cf91",
+        "name": "nana",
+        "email": "nana@gmail.com",
+        "username": "nana_nana",
+        "password": "$2y$10$WazMi0yrUJcPYZaYTmNzt.sfUbPgqgKEr06FzGpgN3O\/lIM7ddOwy",
+        "role": "admin",
+        "created_at": "2026-10-07 13:42:16"
+    },
+    {
+        "id": "usr_1d5de643065c",
+        "name": "kono",
+        "email": "kono@gmail.com",
+        "username": "konoganz",
+        "password": "$2y$10$sKA7nJsRYYLmV1gThy3\/nuf5PoL15dsZ22Ma5qKgW\/bVGa.CwPhbO",
+        "role": "mahasiswa",
+        "created_at": "2026-10-07 13:43:19"
     }
 ]

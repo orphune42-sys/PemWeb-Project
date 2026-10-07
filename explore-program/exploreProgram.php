@@ -83,10 +83,11 @@ $programs = [
 </head>
 
 <body>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
     <div class="dashboard-container">
         <aside class="sidebar">
             <?php
-            $activeMenu = 'explore-program'; 
+            $activeMenu = 'explore-program';
             $basePath = '../';
             include '../sidebarMahasiswa/sidebar.php';
             ?>
@@ -97,6 +98,14 @@ $programs = [
         </aside>
         <main class="main-content">
             <header class="top-header">
+                <button type="button" class="hamburger-btn" id="sidebarToggleBtn" aria-label="Buka Menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+
                 <h1 class="page-title">Explore Program</h1>
                 <div class="header-user">
                     <button type="button" class="btn-icon" aria-label="Notifikasi">
