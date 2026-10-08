@@ -1,6 +1,10 @@
 <?php
 $dataFile = '../data/users.json';
-$users = file_exists($dataFile) ? json_decode(file_get_contents($dataFile), true) : [];
+$users = [];
+if (file_exists($dataFile)) {
+    $decoded = json_decode(file_get_contents($dataFile), true);
+    $users = is_array($decoded) ? $decoded : [];
+}
 
 $user = null;
 if (!empty($users)) {
@@ -9,9 +13,7 @@ if (!empty($users)) {
         $user = $u;
         break;
         }
-    }
-
-    if (!$user) {
+    } if (!$user) {
         $user = end($users);
     }
 }
@@ -25,8 +27,11 @@ $gender     = $user['gender'] ?? 'Perempuan';
 $adminId    = $user['admin_id'] ?? 'ADM-1024';
 $position   = $user['position'] ?? 'Administrator';
 $username   = $user['username'] ?? 'nadhirarindra';
+$avatar     = $user['avatar'] ?? '';
 
 $message = '';
+$messageType = 'success';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? $name);
     $email = trim($_POST['email'] ?? $email);
@@ -36,8 +41,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $gender = trim($_POST['gender'] ?? $gender);
     $adminId = trim($_POST['admin_id'] ?? $adminId);
     $position = trim($_POST['position'] ?? $position);
+    $oldAvatar = $avatar;
+    $uploadError = '';
 
-    if (!empty($users)) {
+    if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $file = $_FILES['avatar'];
+
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            $uploadError = ($file['error'] === UPLOAD_ERR_INI_SIZE || $file['error'] === UPLOAD_ERR_FORM_SIZE)
+                ? 'Ukuran foto terlalu besar.'
+                : 'Upload foto gagal, silakan coba lagi.';
+        } else {
+            $allowed = [
+                'image/jpeg' => 'jpg',
+                'image/png'  => 'png',
+                'image/webp' => 'webp',
+            ];
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mime  = $finfo->file($file['tmp_name']);
+
+            if (!isset($allowed[$mime]) || @getimagesize($file['tmp_name']) === false) {
+                $uploadError = 'Format foto harus JPG, PNG, atau WEBP.';
+            } elseif ($file['size'] > 2 * 1024 * 1024) {
+                $uploadError = 'Ukuran foto maksimal 2 MB.';
+            } else {
+                $uploadDir = __DIR__ . '/../uploads/avatars/';
+                if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true)) {
+                    $uploadError = 'Folder upload tidak dapat dibuat.';
+                } else {
+                    $newName = bin2hex(random_bytes(8)) . '.' . $allowed[$mime];
+                    if (move_uploaded_file($file['tmp_name'], $uploadDir . $newName)) {
+                        $avatar = 'uploads/avatars/' . $newName;
+                    } else {
+                        $uploadError = 'Foto gagal disimpan di server.';
+                    }
+                }
+            }
+        }
+    }
+
+    if ($uploadError !== '') {
+        $message = $uploadError;
+        $messageType = 'error';
+        $avatar = $oldAvatar;
+    } elseif (empty($users)) {
+        $message = 'Data pengguna tidak ditemukan, profil tidak dapat disimpan.';
+        $messageType = 'error';
+    } else {
         foreach ($users as &$u) {
             if (($user && isset($user['id']) && ($u['id'] ?? '') === $user['id']) || 
                 (strtolower($u['email'] ?? '') === strtolower($email))) {
@@ -49,38 +99,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $u['gender'] = $gender;
                 $u['admin_id'] = $adminId;
                 $u['position'] = $position;
+                $u['avatar'] = $avatar;
                 break;
             }
         }
         unset($u);
 
-        file_put_contents($dataFile, json_encode($users, JSON_PRETTY_PRINT));
-        $message = 'Profil berhasil disimpan!';
+        $json = json_encode($users, JSON_PRETTY_PRINT);
+        if ($json === false || file_put_contents($dataFile, $json, LOCK_EX) === false) {
+            $message = 'Gagal menyimpan profil.';
+            $messageType = 'error';
+            if ($avatar !== $oldAvatar && $avatar !== '') {
+                @unlink(__DIR__ . '/../' . $avatar);
+            }
+            $avatar = $oldAvatar;
+        } else {
+            $message = 'Profil berhasil disimpan!';
+            if ($oldAvatar !== '' && $oldAvatar !== $avatar && str_starts_with($oldAvatar, 'uploads/avatars/')) {
+                $oldPath = __DIR__ . '/../' . $oldAvatar;
+                if (is_file($oldPath)) {
+                    @unlink($oldPath);
+                }
+            }
+        }
     }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Admin - FindYourPath</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../sidebarAdmin/style.css">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Profil Admin - FindYourPath</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="../sidebarAdmin/style.css">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
     <div class="layout-wrapper">
-       
        <?php 
             $activeMenu = 'profile'; 
             $basePath = '../';
             include '../sidebarAdmin/sidebar.php'; 
         ?>
-
     <div class="main-content">
         <header class="top-header">
             <div class="header-left">
@@ -93,7 +157,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
                 <h1 class="page-title">Profil Admin</h1>
             </div>
-
                 <div class="header-right">
                     <button type="button" class="btn-icon" aria-label="Notifikasi">
                         <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
@@ -101,7 +164,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                         </svg>
                     </button>
-
                     <div class="user-profile-badge">
                         <div class="user-avatar-circle">
                             <span>A</span>
@@ -121,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <?php if (!empty($message)): ?>
-                <div class="toast-alert show success">
+                <div class="toast-alert show <?= $messageType === 'error' ? 'error' : 'success' ?>">
                     <?= htmlspecialchars($message) ?>
                 </div>
             <?php endif; ?>
@@ -130,7 +192,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="profile-card">
                     <div class="profile-card-header">
                         <div class="profile-user-info">
-                            <div class="profile-avatar-placeholder"></div>
+                            <?php if (!empty($avatar)): ?>
+                                <img src="../<?= htmlspecialchars($avatar) ?>" class="profile-avatar-placeholder" style="object-fit: cover;" alt="Foto profil">
+                            <?php else: ?>
+                                <div class="profile-avatar-placeholder"></div>
+                            <?php endif; ?>
                             <div class="profile-name-group">
                                 <h2 class="profile-name"><?= htmlspecialchars($name) ?></h2>
                                 <p class="profile-role"><?= htmlspecialchars($position) ?></p>
@@ -235,8 +301,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <h3 class="modal-title">Edit Data Diri</h3>
                 <button type="button" class="modal-close-btn" id="btnCloseEditModal">&times;</button>
             </div>
-            <form method="POST" action="profile.php">
+            <form method="POST" action="profile.php" enctype="multipart/form-data">
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label for="inputAvatar">Foto Profil</label>
+                        <input type="file" id="inputAvatar" name="avatar" accept="image/png,image/jpeg,image/webp">
+                    </div>
+
                     <div class="form-group">
                         <label for="inputName">Nama Lengkap</label>
                         <input type="text" id="inputName" name="name" value="<?= htmlspecialchars($name) ?>" required>
@@ -294,5 +365,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <script src="../sidebar/script.js"></script>
     <script src="script.js"></script>
-</body>
+    </body>
 </html>
