@@ -199,7 +199,10 @@ $programs = [
 
                             <p class="card-desc"><?= htmlspecialchars($prog['desc']) ?></p>
 
-                            <a href="#" class="detail-link">Lihat Detail &rarr;</a>
+                            <a href="../detail_program/detail_program.php?id=<?= urlencode($prog['id']) ?>" class="detail-link">
+                                Lihat Detail &rarr;
+                            </a>
+                        </a>
                         </div>
                     </div>
                 <?php endforeach; ?>
