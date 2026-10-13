@@ -29,11 +29,9 @@ body {
   position: fixed;
   height: 100vh;
   top: 0;
-  left: 0; /* <--- INI PENYEBABNYA! top & left diset 0 terus di desktop/global */
-  z-index: 100;
+  left: 0;
 }
 
-/* Biar konten utama berada pas di sebelah kanan sidebar */
 .main-content {
   margin-left: 250px !important;
   flex-grow: 1;
@@ -173,21 +171,6 @@ body {
   line-height: 1.5;
 }
 
-.banner-image-box {
-  width: 280px;
-  height: 130px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.banner-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
-}
-
 .filter-section {
   background-color: #ffffff;
   border-radius: 12px;
@@ -253,22 +236,6 @@ body {
   color: #0f172a;
   cursor: pointer;
   padding-right: 10px;
-}
-
-.btn-search {
-  background-color: #388ca6;
-  color: #ffffff;
-  border: none;
-  padding: 10px 24px;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-search:hover {
-  background-color: #2b6e83;
 }
 
 .program-grid {
@@ -437,12 +404,6 @@ body {
   pointer-events: auto;
 }
 
-.card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 @media (max-width: 1200px) {
   .program-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -450,7 +411,6 @@ body {
 }
 
 @media (max-width: 992px) {
-  /* 1. Tampilkan Tombol Hamburger */
   .hamburger-btn {
     display: inline-flex !important;
     align-items: center;
@@ -460,37 +420,33 @@ body {
     z-index: 10;
   }
 
-  /* 2. Reset Main Content agar tidak menyisakan space 250px di kiri */
   .main-content {
     margin-left: 0 !important;
     padding: 16px !important;
   }
 
-  /* 3. Sembunyikan Sidebar ke luar layar sebelah kiri secara default */
   aside#fypSidebar,
   .fyp-sidebar,
   .sidebar {
     position: fixed !important;
     top: 0 !important;
-    left: -280px !important; /* Tersembunyi di kiri */
+    left: -280px !important;
     width: 260px !important;
     height: 100vh !important;
-    z-index: 9999 !important; /* Harus paling tinggi dari semua elemen */
+    z-index: 9999 !important;
     background-color: #ffffff !important;
     box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15) !important;
     transition: left 0.3s ease-in-out !important;
     transform: translateX(-100%) !important;
   }
 
-  /* 4. SAAT HAMBURGER DIKLIK (.active) -> Geser Sidebar Masuk */
   aside#fypSidebar.active,
   .fyp-sidebar.active,
   .sidebar.active {
-    left: 0 !important; /* MUNCUL KE LAYAR */
+    left: 0 !important;
     transform: translateX(0) !important;
   }
 
-  /* 5. Backdrop Penggelap Background */
   .sidebar-backdrop {
     position: fixed !important;
     top: 0 !important;
@@ -498,7 +454,7 @@ body {
     width: 100vw !important;
     height: 100vh !important;
     background-color: rgba(15, 23, 42, 0.5) !important;
-    z-index: 9998 !important; /* Tepat di bawah sidebar */
+    z-index: 9998 !important;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -527,9 +483,7 @@ body {
   .select-wrapper select {
     width: 100%;
   }
-  .banner-image {
-    flex: 0 0 220px;
-  }
+
   .hero-banner {
     background-image: none;
     background-color: #eaf3fb;
@@ -540,14 +494,6 @@ body {
     text-align: center;
   }
 
-  /* .hero-banner::before {
-    content: "";
-    display: block;
-    flex: 0 0 170px;
-    width: 100%;
-    background: url("../assets/banner_illustration.png") 70% center / cover no-repeat;
-  } */
-
   .banner-content {
     max-width: 100%;
     padding: 20px;
@@ -555,34 +501,6 @@ body {
 }
 
 @media (max-width: 768px) {
-  .hamburger-btn {
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 100;
-  }
-
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: -280px;
-    width: 260px;
-    height: 100vh;
-    z-index: 1000;
-    transition: left 0.3s ease;
-    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
-  }
-
-  .sidebar.active {
-    left: 0 !important;
-  }
-
-  .main-content {
-    margin-left: 0;
-    padding: 16px;
-  }
-
   .top-header {
     gap: 12px;
   }
@@ -601,16 +519,6 @@ body {
     text-align: center;
     padding: 24px 20px;
     gap: 16px;
-  }
-
-  .banner-content {
-    max-width: 100%;
-  }
-
-  .banner-image {
-    flex: initial;
-    width: 100%;
-    max-width: 200px;
   }
 
   .banner-content h2 {
@@ -635,6 +543,7 @@ body {
   .page-title {
     font-size: 16px;
   }
+
   .select-group {
     grid-template-columns: 1fr;
   }
@@ -643,9 +552,7 @@ body {
     flex-direction: column;
     gap: 6px;
   }
-  .hero-banner::before {
-    flex-basis: 140px;
-  }
+
   .program-grid {
     grid-template-columns: 1fr;
   }

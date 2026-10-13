@@ -51,8 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".fyp-sidebar") ||
     document.querySelector("aside");
 
-  console.log("sidebar ditemukan?", sidebar); // cek di Console (F12)
-  console.log("sidebar backdrop ditemukan?", backdrop); // cek di Console (F12)
+  console.log("sidebar ditemukan?", sidebar); 
+  console.log("sidebar backdrop ditemukan?", backdrop);
 
   function openSidebar(e) {
     if (e) e.stopPropagation();
@@ -76,7 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 }, { passive: true });
 
-// Tambahan untuk layar sentuh (HP): geser jari di layar juga menutup
 window.addEventListener('touchmove', (e) => {
     if (sidebar && sidebar.classList.contains('active') && !sidebar.contains(e.target)) {
         closeSidebar();
