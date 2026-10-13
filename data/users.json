@@ -18,39 +18,12 @@
         "created_at": "2026-09-30 12:05:32"
     },
     {
-        "id": "usr_d57b30cd98d7",
-        "name": "hafshah",
-        "email": "hafshah@gmail.com",
-        "username": "hfsnaii",
-        "password": "$2y$10$ZGRXh2jYKjZ7\/Ry5Pv5KBOaOgHGzSwfhsA8OzTFnLyrdkoZsSDFE.",
-        "role": "mahasiswa",
-        "created_at": "2026-09-30 15:15:17"
-    },
-    {
-        "id": "usr_7acde8b55d52",
-        "name": "admin cute",
-        "email": "admin@gmail.com",
-        "username": "adminimup",
-        "password": "$2y$10$GLtsTvnwwdKC5ttszxPMfusBdUkAp3JU2GJq\/ZyDdda\/mAiSUOTSW",
-        "role": "admin",
-        "created_at": "2026-09-30 15:29:15"
-    },
-    {
-        "id": "usr_8901262b94f4",
-        "name": "coco",
-        "email": "coco@gmail.com",
-        "username": "cocoimup",
-        "password": "$2y$10$zG8GSQDt\/UYYlXrJqNWSnexOg9EIwkZeYz3hVKlBBlj7TNRrdIt9i",
-        "role": "admin",
-        "created_at": "2026-10-01 07:49:51"
-    },
-    {
         "id": "usr_ef7e9d07687e",
         "name": "admin fyp",
         "email": "adminfyp@gmail.com",
         "username": "admin_fyp",
-        "password": "$2y$10$pFLvaUaRwNbwpkEscaAY9OLt.ZEjjqDX9CG6y7TIFwTHsc63\/E.Hq",
-        "role": "mahasiswa",
+        "password": "$2y$10$pFLvaUaRwNbwpkEscaAY9OLt.ZEjjqDX9CG6y7TIFwTHsc63\/E.Hq", 
+        "role": "admin",
         "created_at": "2026-10-07 08:25:48"
     },
     {
@@ -58,7 +31,7 @@
         "name": "nana",
         "email": "nana@gmail.com",
         "username": "nana_nana",
-        "password": "$2y$10$WazMi0yrUJcPYZaYTmNzt.sfUbPgqgKEr06FzGpgN3O\/lIM7ddOwy",
+        "password": "$2y$10$WazMi0yrUJcPYZaYTmNzt.sfUbPgqgKEr06FzGpgN3O\/lIM7ddOwy", 
         "role": "admin",
         "created_at": "2026-10-07 13:42:16"
     },

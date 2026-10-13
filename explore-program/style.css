@@ -16,23 +16,30 @@ body {
   min-height: 100vh;
 }
 
-.sidebar {
-  width: 250px;
+.fyp-sidebar {
+  width: 250px !important;
+  min-width: 250px !important;
+  max-width: 250px !important;
   background-color: #ffffff;
   border-right: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   padding: 24px 18px;
   position: fixed;
   height: 100vh;
+  top: 0;
+  left: 0; /* <--- INI PENYEBABNYA! top & left diset 0 terus di desktop/global */
   z-index: 100;
 }
 
+/* Biar konten utama berada pas di sebelah kanan sidebar */
 .main-content {
-  margin-left: 250px;
+  margin-left: 250px !important;
   flex-grow: 1;
   padding: 24px 36px 40px;
   background-color: #f8fafc;
+  min-height: 100vh;
 }
 
 .top-header {
@@ -415,9 +422,10 @@ body {
   width: 100vw;
   height: 100vh;
   background-color: rgba(15, 23, 42, 0.5);
-  z-index: 99;
+  z-index: 998;
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transition:
     opacity 0.3s ease,
     visibility 0.3s ease;
@@ -426,6 +434,7 @@ body {
 .sidebar-backdrop.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .card-image img {
@@ -441,6 +450,69 @@ body {
 }
 
 @media (max-width: 992px) {
+  /* 1. Tampilkan Tombol Hamburger */
+  .hamburger-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* 2. Reset Main Content agar tidak menyisakan space 250px di kiri */
+  .main-content {
+    margin-left: 0 !important;
+    padding: 16px !important;
+  }
+
+  /* 3. Sembunyikan Sidebar ke luar layar sebelah kiri secara default */
+  aside#fypSidebar,
+  .fyp-sidebar,
+  .sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: -280px !important; /* Tersembunyi di kiri */
+    width: 260px !important;
+    height: 100vh !important;
+    z-index: 9999 !important; /* Harus paling tinggi dari semua elemen */
+    background-color: #ffffff !important;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15) !important;
+    transition: left 0.3s ease-in-out !important;
+    transform: translateX(-100%) !important;
+  }
+
+  /* 4. SAAT HAMBURGER DIKLIK (.active) -> Geser Sidebar Masuk */
+  aside#fypSidebar.active,
+  .fyp-sidebar.active,
+  .sidebar.active {
+    left: 0 !important; /* MUNCUL KE LAYAR */
+    transform: translateX(0) !important;
+  }
+
+  /* 5. Backdrop Penggelap Background */
+  .sidebar-backdrop {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: rgba(15, 23, 42, 0.5) !important;
+    z-index: 9998 !important; /* Tepat di bawah sidebar */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 0.3s ease,
+      visibility 0.3s ease;
+  }
+
+  .sidebar-backdrop.active {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
   .filter-section {
     flex-direction: column;
     align-items: stretch;
@@ -456,31 +528,54 @@ body {
     width: 100%;
   }
   .banner-image {
-        flex: 0 0 220px; 
-    }
-    
+    flex: 0 0 220px;
+  }
+  .hero-banner {
+    background-image: none;
+    background-color: #eaf3fb;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    min-height: 0;
+    text-align: center;
+  }
+
+  /* .hero-banner::before {
+    content: "";
+    display: block;
+    flex: 0 0 170px;
+    width: 100%;
+    background: url("../assets/banner_illustration.png") 70% center / cover no-repeat;
+  } */
+
+  .banner-content {
+    max-width: 100%;
+    padding: 20px;
+  }
 }
 
 @media (max-width: 768px) {
   .hamburger-btn {
-    display: inline-flex;
+    display: inline-flex !important;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    z-index: 100;
   }
 
   .sidebar {
     position: fixed;
     top: 0;
-    left: -280px; 
+    left: -280px;
     width: 260px;
     height: 100vh;
-    z-index: 100;
+    z-index: 1000;
     transition: left 0.3s ease;
     box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
   }
 
   .sidebar.active {
-    left: 0; 
+    left: 0 !important;
   }
 
   .main-content {
@@ -498,47 +593,64 @@ body {
   }
 
   .user-info {
-    display: none; 
+    display: none;
   }
 
-.hero-banner {
-        flex-direction: column-reverse; /* Gambar pindah ke atas/bawah tanpa keluar layar */
-        text-align: center;
-        padding: 24px 20px;
-        gap: 16px;
-    }
+  .hero-banner {
+    flex-direction: column-reverse;
+    text-align: center;
+    padding: 24px 20px;
+    gap: 16px;
+  }
 
-    .banner-content {
-        max-width: 100%;
-    }
+  .banner-content {
+    max-width: 100%;
+  }
 
-    .banner-image {
-        flex: initial;
-        width: 100%;
-        max-width: 200px; /* Batasi lebar gambar di HP agar ramping */
-    }
+  .banner-image {
+    flex: initial;
+    width: 100%;
+    max-width: 200px;
+  }
 
-    .banner-content h2 {
-        font-size: 18px;
-    }
+  .banner-content h2 {
+    font-size: 18px;
+  }
 
-    .banner-content p {
-        font-size: 12.5px;
-    }
+  .banner-content p {
+    font-size: 12.5px;
+  }
 
   .program-grid {
-    grid-template-columns: 1fr; 
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
+  }
+
+  .card-image {
+    height: 140px;
   }
 }
 
 @media (max-width: 480px) {
+  .page-title {
+    font-size: 16px;
+  }
   .select-group {
-    grid-template-columns: 1fr; 
+    grid-template-columns: 1fr;
   }
 
   .card-meta {
     flex-direction: column;
     gap: 6px;
+  }
+  .hero-banner::before {
+    flex-basis: 140px;
+  }
+  .program-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card-image {
+    height: 140px;
   }
 }

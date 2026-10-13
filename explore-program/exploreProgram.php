@@ -85,17 +85,11 @@ $programs = [
 <body>
     <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
     <div class="dashboard-container">
-        <aside class="sidebar">
             <?php
             $activeMenu = 'explore-program';
             $basePath = '../';
             include '../sidebarMahasiswa/sidebar.php';
             ?>
-
-            <div class="sidebar-footer">
-                <a href="../login/login.php" class="logout-link">Logout</a>
-            </div>
-        </aside>
         <main class="main-content">
             <header class="top-header">
                 <button type="button" class="hamburger-btn" id="sidebarToggleBtn" aria-label="Buka Menu">

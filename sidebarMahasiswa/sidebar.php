@@ -31,9 +31,7 @@ $menuItems = [
         <a href="<?= htmlspecialchars($basePath) ?>profile/profile.php" class="sidebar-brand">
             <img src="<?= htmlspecialchars($basePath) ?>assets/LOGO.png" alt="FindYourPath Logo" class="brand-logo">
         </a>
-        <button type="button" class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Tutup Menu">
-            &times;
-        </button>
+        
     </div>
 
     <nav class="sidebar-nav">
@@ -51,7 +49,7 @@ $menuItems = [
 
     <div class="sidebar-footer">
         <a href="<?= htmlspecialchars($basePath) ?>logout.php" class="nav-link logout-link">
-        <span class="nav-title">Logout</span>
+        <span class="nav-title">Keluar</span>
         </a>
     </div>
 </aside>
