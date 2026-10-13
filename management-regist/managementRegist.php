@@ -107,7 +107,7 @@ $activeMenu = 'registration';
                             <tr>
                                 <th>User</th>
                                 <th>Registration Date</th>
-                                <th>Role/Category</th>
+                                <th>Category</th>
                                 <th>Contact / Location</th>
                                 <th>Status</th>
                                 <th>Actions</th>
@@ -123,7 +123,7 @@ $activeMenu = 'registration';
                                     </div>
                                 </td>
                                 <td class="reg-date">Sep 28, 2026</td>
-                                <td class="reg-role">Student</td>
+                                <td class="reg-role">Beasiswa</td>
                                 <td class="reg-contact">
                                     <span>+62 812-3456-7890</span>
                                     <span class="reg-location">Jakarta</span>
@@ -159,7 +159,7 @@ $activeMenu = 'registration';
                                     </div>
                                 </td>
                                 <td class="reg-date">Sep 27, 2026</td>
-                                <td class="reg-role">Mentor</td>
+                                <td class="reg-role">Beasiswa</td>
                                 <td class="reg-contact">
                                     <span>+62 813-9876-5432</span>
                                     <span class="reg-location">Bandung</span>
@@ -189,7 +189,7 @@ $activeMenu = 'registration';
                                     </div>
                                 </td>
                                 <td class="reg-date">Sep 26, 2026</td>
-                                <td class="reg-role">Student</td>
+                                <td class="reg-role">Beasiswa</td>
                                 <td class="reg-contact">
                                     <span>+62 821-5678-1234</span>
                                     <span class="reg-location">Surabaya</span>
@@ -219,7 +219,7 @@ $activeMenu = 'registration';
                                     </div>
                                 </td>
                                 <td class="reg-date">Sep 25, 2026</td>
-                                <td class="reg-role">Organizer</td>
+                                <td class="reg-role">Lomba</td>
                                 <td class="reg-contact">
                                     <span>+62 856-7890-1234</span>
                                     <span class="reg-location">Yogyakarta</span>
@@ -249,7 +249,7 @@ $activeMenu = 'registration';
                                     </div>
                                 </td>
                                 <td class="reg-date">Sep 24, 2026</td>
-                                <td class="reg-role">Student</td>
+                                <td class="reg-role">Lomba</td>
                                 <td class="reg-contact">
                                     <span>+62 878-2345-6789</span>
                                     <span class="reg-location">Semarang</span>
@@ -279,7 +279,7 @@ $activeMenu = 'registration';
                                     </div>
                                 </td>
                                 <td class="reg-date">Sep 23, 2026</td>
-                                <td class="reg-role">Mentor</td>
+                                <td class="reg-role">Lomba</td>
                                 <td class="reg-contact">
                                     <span>+62 819-8765-4321</span>
                                     <span class="reg-location">Medan</span>
@@ -309,7 +309,7 @@ $activeMenu = 'registration';
                                     </div>
                                 </td>
                                 <td class="reg-date">Sep 23, 2026</td>
-                                <td class="reg-role">Student</td>
+                                <td class="reg-role">Beasiswa</td>
                                 <td class="reg-contact">
                                     <span>+62 819-8365-4322</span>
                                     <span class="reg-location">Surabaya</span>
