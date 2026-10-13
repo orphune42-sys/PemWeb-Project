@@ -5,7 +5,7 @@ $menuItems = [
     [
     'key'   => 'dashboard',
     'title' => 'Dashboard',
-    'url'   => $basePath . 'dashboard/dashboard.php'
+    'url'   => $basePath . 'dashboard-admin/dashboardAdmin.php'
     ],
     [
     'key'   => 'program',
@@ -20,7 +20,7 @@ $menuItems = [
     [
     'key'   => 'registration',
     'title' => 'Registration',
-    'url'   => $basePath . 'registration/registration.php'
+    'url'   => $basePath . 'management-regist/managementRegist.php'
     ],
     [
     'key'   => 'profile',
