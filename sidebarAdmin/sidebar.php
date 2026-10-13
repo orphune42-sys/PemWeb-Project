@@ -10,7 +10,7 @@ $menuItems = [
     [
     'key'   => 'program',
     'title' => 'Program',
-    'url'   => $basePath . 'program/program.php'
+    'url'   => $basePath . 'program-management/program.php'
     ],
     [
     'key'   => 'schedule',
