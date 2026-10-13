@@ -1,4 +1,16 @@
 <?php
+session_start();
+
+if (isset($_SESSION['user'])) {
+    $role = $_SESSION['user']['role'] ?? 'mahasiswa';
+    if ($role === 'admin') {
+        header('Location: dashboard-admin/dashboardAdmin.php');
+    } else {
+        header('Location: mahasiswa/dashboard.php');
+    }
+    exit;
+}
+
 $serverMessage = '';
 $serverSuccess = false;
 
@@ -21,17 +33,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = strtolower(trim($inputData['email'] ?? ''));
     $password = $inputData['password'] ?? '';
 
-    $dataFile = __DIR__ . '/../data/users.json';
+    $dataFile = __DIR__ . '/data/users.json';
     $users = file_exists($dataFile) ? json_decode(file_get_contents($dataFile), true) : [];
     if (!is_array($users)) $users = [];
 
     $userFound = null;
     if (!empty($email) && !empty($password)) {
         foreach ($users as $user) {
-            if (
-                strtolower($user['email'] ?? '') === $email || 
-                (isset($user['username']) && strtolower($user['username']) === $email)
-            ) {
+            $userEmail = strtolower($user['email'] ?? '');
+            $userUsername = strtolower($user['username'] ?? '');
+
+            if ($userEmail === $email || $userUsername === $email) {
                 if (password_verify($password, $user['password'])) {
                     $userFound = $user;
                     break;
@@ -41,27 +53,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($userFound) {
+        $userRole = strtolower($userFound['role'] ?? 'mahasiswa');
+        $targetRedirect = ($userRole === 'admin') ? 'dashboard-admin/dashboardAdmin.php' : 'mahasiswa/dashboard.php';
+
+        $_SESSION['user'] = [
+            'name'  => $userFound['name'],
+            'email' => $userFound['email'],
+            'role'  => $userRole
+        ];
+
         if ($isJson) {
             header('Content-Type: application/json; charset=UTF-8');
             echo json_encode([
                 'success' => true,
                 'message' => 'Login berhasil! Selamat datang, ' . htmlspecialchars($userFound['name']),
-                'data' => [
-                    'user' => [
-                        'name' => $userFound['name'],
-                        'email' => $userFound['email']
-                    ]
-                ]
+                'redirect' => $targetRedirect
             ]);
             exit;
         }
 
-        $serverSuccess = true;
-        $serverMessage = 'Login berhasil! Selamat datang, ' . htmlspecialchars($userFound['name']);
+        header('Location: ' . $targetRedirect);
+        exit;
     } else {
         $errorMessage = empty($email) || empty($password)
-            ? 'Email dan password tidak boleh kosong!'
-            : 'Email atau password yang Anda masukkan salah!';
+            ? 'Email/Username dan password tidak boleh kosong!'
+            : 'Email/Username atau password yang Anda masukkan salah!';
 
         if ($isJson) {
             header('Content-Type: application/json; charset=UTF-8');
@@ -79,12 +95,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - FindYourPath</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="bg-blob blob-1"></div>
     <div class="bg-blob blob-2"></div>
@@ -94,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="auth-card" id="authCard">
         <div class="auth-left">
             <div class="logo-header">
-                <img src="../assets/LOGO.png" alt="logo-fyp" class="logo-fyp">
+                <img src="../PemWeb-Project/assets/LOGO.png" alt="logo-fyp" class="logo-fyp">
             </div>
 
             <div class="welcome-section">
@@ -103,12 +121,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="illustration-box">
-                <img 
-                    src="../assets/assest_login_register.png" 
-                    alt="FindYourPath Illustration" 
+                <img
+                    src="../PemWeb-Project/assets/assest_login_register.png"
+                    alt="FindYourPath Illustration"
                     class="hero-illustration"
-                    id="heroIllustration"
-                >
+                    id="heroIllustration">
             </div>
         </div>
 
@@ -118,35 +135,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <form id="loginForm" method="POST" action="login.php" novalidate>
                 <div class="form-group">
-                    <input 
-                        type="email" 
-                        name="email" 
-                        id="email" 
-                        class="form-control" 
-                        placeholder="Email" 
-                        required 
-                        autocomplete="email"
-                    >
+                    <input
+                        type="text"
+                        name="email"
+                        id="email"
+                        class="form-control"
+                        placeholder="Email atau Username"
+                        required
+                        autocomplete="username">
                 </div>
 
                 <div class="form-group">
                     <div class="password-wrapper">
-                        <input 
-                            type="password" 
-                            name="password" 
-                            id="password" 
-                            class="form-control" 
-                            placeholder="Password" 
-                            required 
-                            autocomplete="current-password"
-                        >
-                        <button 
-                            type="button" 
-                            id="togglePassword" 
-                            class="password-toggle" 
-                            title="Tampilkan / Sembunyikan Password" 
-                            aria-label="Toggle password visibility"
-                        >
+                        <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            class="form-control"
+                            placeholder="Password"
+                            required
+                            autocomplete="current-password">
+                        <button
+                            type="button"
+                            id="togglePassword"
+                            class="password-toggle"
+                            title="Tampilkan / Sembunyikan Password"
+                            aria-label="Toggle password visibility">
                             <svg class="eye-icon" id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
@@ -162,11 +176,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
 
             <div class="auth-footer">
-                <small>Belum punya akun? <a href="../Register/register.php">Register</a></small>
+                <small>Belum punya akun? <a href="register/register.php">Register</a></small>
             </div>
         </div>
     </div>
 
     <script src="script.js"></script>
 </body>
+
 </html>

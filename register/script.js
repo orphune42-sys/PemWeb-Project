@@ -189,10 +189,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     showToast(result.message || 'Pendaftaran berhasil!', 'success', 3000);
                     if (btnText) btnText.textContent = 'Berhasil!';
                     registerForm.reset();
-
                     setTimeout(() => {
-                        window.location.href = '../Login/login.php';
-                    }, 1400);
+                        window.location.href = '../login.php';
+                    }, 1500);
                 } else {
                     showToast(result.message || 'Pendaftaran gagal!', 'error');
                     btnSubmit.classList.remove('loading');

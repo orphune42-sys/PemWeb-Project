@@ -1,30 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    const navItems = document.querySelectorAll('.nav-item');
-    navItems.forEach(item => {
-        item.addEventListener('click', function (e) {
-            if (this.getAttribute('href') === '#') {
-                e.preventDefault();
-            }
-            navItems.forEach(nav => nav.classList.remove('nav-item--active'));
-            this.classList.add('nav-item--active');
-        });
-    });
-
     const notifBtn = document.querySelector('.header-notif');
     if (notifBtn) {
         notifBtn.addEventListener('click', () => {
             alert('Belum ada notifikasi pendaftaran baru.');
-        });
-    }
-
-    const logoutLink = document.querySelector('.logout-link');
-    if (logoutLink) {
-        logoutLink.addEventListener('click', function (e) {
-            e.preventDefault();
-            if (confirm('Apakah Anda yakin ingin keluar?')) {
-                console.log('Mengarahkan ke halaman logout...');
-            }
         });
     }
 
@@ -64,15 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('Memuat ulang data tabel...');
         });
     }
-
-    const tableActions = document.querySelectorAll('.action-btn');
-    tableActions.forEach(btn => {
-        btn.addEventListener('click', function () {
-            const actionType = this.getAttribute('title');
-            const userName = this.closest('tr').querySelector('.user-name').innerText;
-            console.log(`Menjalankan aksi "${actionType}" untuk pendaftar: ${userName}`);
-        });
-    });
 
     const pageButtons = document.querySelectorAll('.page-btn:not(.page-btn--nav)');
     pageButtons.forEach(btn => {

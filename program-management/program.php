@@ -75,7 +75,10 @@ function e($value)
 
 <body>
 
-    <?php include "../sidebarAdmin/sidebar.php"; ?>
+    <?php 
+    $activeMenu = 'program';
+    $basePath = '../';
+    include "../sidebarAdmin/sidebar.php"; ?>
 
     <main class="program-main">
 
