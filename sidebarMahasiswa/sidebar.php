@@ -5,7 +5,7 @@ $menuItems = [
     [
     'key'   => 'dashboard',
     'title' => 'Dashboard',
-    'url'   => $basePath . 'dashboard/dashboard.php'
+    'url'   => $basePath . 'dashboard-user/user.php'
     ],
     [
     'key'   => 'explore-program',
