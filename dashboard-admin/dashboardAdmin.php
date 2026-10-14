@@ -2,25 +2,9 @@
 $basePath = '../';
 $activeMenu = 'dashboard';
 
-$programs = [
-    ['id' => 1,  'title' => 'Beasiswa Unggulan 2026',  'category' => 'Beasiswa'],
-    ['id' => 2,  'title' => 'Beasiswa Prestasi BUMN',  'category' => 'Beasiswa'],
-    ['id' => 3,  'title' => 'Beasiswa Talenta Muda',   'category' => 'Beasiswa'],
-    ['id' => 4,  'title' => 'Beasiswa Pemuda Bangsa',  'category' => 'Beasiswa'],
-    ['id' => 5,  'title' => 'Beasiswa Karya Indonesia', 'category' => 'Beasiswa'],
-    ['id' => 6,  'title' => 'Beasiswa Indonesia Maju', 'category' => 'Beasiswa'],
-    ['id' => 7,  'title' => 'Beasiswa Riset Akademik', 'category' => 'Beasiswa'],
-    ['id' => 8,  'title' => 'National UI/UX Competition', 'category' => 'Lomba'],
-    ['id' => 9,  'title' => 'Hackathon Web Dev 2026',    'category' => 'Lomba'],
-    ['id' => 10, 'title' => 'Lomba Karya Tulis Ilmiah',  'category' => 'Lomba'],
-    ['id' => 11, 'title' => 'Business Plan Challenge',   'category' => 'Lomba'],
-    ['id' => 12, 'title' => 'Cyber Security Contest',   'category' => 'Lomba'],
-    ['id' => 13, 'title' => 'Lomba AI & Data Science',   'category' => 'Lomba'],
-];
-
-$totalProgram  = count($programs);
-$totalLomba    = count(array_filter($programs, fn($p) => $p['category'] === 'Lomba'));
-$totalBeasiswa = count(array_filter($programs, fn($p) => $p['category'] === 'Beasiswa'));
+$totalProgram  = 48; 
+$totalLomba    = 28; 
+$totalBeasiswa = 12;
 
 $pctBeasiswa = $totalProgram > 0 ? round(($totalBeasiswa / $totalProgram) * 100) : 0;
 $pctLomba    = $totalProgram > 0 ? round(($totalLomba / $totalProgram) * 100) : 0;

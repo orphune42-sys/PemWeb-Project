@@ -1,7 +1,7 @@
 <?php
 $basePath = '../';
 $activeMenu = 'registration';
-
+    
 $allRegistrations = [
     ['id' => 1, 'nama_mahasiswa' => 'Sarah Cantika', 'email' => 'sarahcantika@email.com', 'jenis_program' => 'Beasiswa', 'status' => 'Approved', 'created_at' => '2026-10-13'],
     ['id' => 2, 'nama_mahasiswa' => 'Mike Rossa', 'email' => 'mikeross@email.com', 'jenis_program' => 'Beasiswa', 'status' => 'Pending', 'created_at' => '2026-10-12'],
