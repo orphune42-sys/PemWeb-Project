@@ -60,28 +60,19 @@ function matchesSearch($title, $search)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars(pageTitle($page)); ?> - FindYourPath</title>
+    <link rel="stylesheet" href="../sidebarMahasiswa/style.css">
     <link rel="stylesheet" href="user.css">
+        
+
 </head>
 
 <body>
     <div class="app">
-        <aside class="sidebar">
-            <a href="mahasiswa.php?page=dashboard" class="brand">
-                <div class="brand-logo">FY<span>℘</span></div>
-                <div>
-                    <div class="brand-name">FindYour<span>Path</span></div>
-                    <div class="brand-subtitle">Student Career &amp; Achievement</div>
-                </div>
-            </a>
-            <nav class="sidebar-nav">
-                <a href="mahasiswa.php?page=dashboard" class="nav-item <?= isActive($page, 'dashboard'); ?>">Dashboard</a>
-                <a href="mahasiswa.php?page=explore" class="nav-item <?= isActive($page, 'explore'); ?>">Explore Program</a>
-                <a href="mahasiswa.php?page=profile" class="nav-item <?= isActive($page, 'profile'); ?>">Profile</a>
-                <a href="mahasiswa.php?page=applications" class="nav-item <?= isActive($page, 'applications'); ?>">Applications</a>
-                <a href="mahasiswa.php?page=opportunities" class="nav-item <?= isActive($page, 'opportunities'); ?>">Find Opportunities</a>
-            </nav>
-            <a href="mahasiswa.php?page=logout" class="logout-link" id="logoutBtn">Logout</a>
-        </aside>
+        <?php
+        $activeMenu = 'dashboard';
+        $basePath = '../';
+        include '../sidebarMahasiswa/sidebar.php';
+        ?>
 
         <main class="main">
             <header class="topbar">
