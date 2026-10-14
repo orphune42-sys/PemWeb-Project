@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($userFound) {
         $userRole = strtolower($userFound['role'] ?? 'mahasiswa');
-        $targetRedirect = ($userRole === 'admin') ? 'dashboard-admin/dashboardAdmin.php' : 'mahasiswa/dashboard.php';
+        $targetRedirect = ($userRole === 'admin') ? 'dashboard-admin/dashboardAdmin.php' : 'dashboard-user/user.php';
 
         $_SESSION['user'] = [
             'name'  => $userFound['name'],
