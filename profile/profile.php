@@ -32,7 +32,40 @@ $avatar     = $user['avatar'] ?? '';
 $message = '';
 $messageType = 'success';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_avatar'])) {
+    if ($avatar === '') {
+        $message = 'Tidak ada foto profil untuk dihapus.';
+        $messageType = 'error';
+    } elseif (empty($users)) {
+        $message = 'Data pengguna tidak ditemukan, foto tidak dapat dihapus.';
+        $messageType = 'error';
+    } else {
+        $oldAvatar = $avatar;
+        foreach ($users as &$u) {
+            if (($user && isset($user['id']) && ($u['id'] ?? '') === $user['id']) ||
+                (strtolower($u['email'] ?? '') === strtolower($email))) {
+                $u['avatar'] = '';
+                break;
+            }
+        }
+        unset($u);
+
+        $json = json_encode($users, JSON_PRETTY_PRINT);
+        if ($json === false || file_put_contents($dataFile, $json, LOCK_EX) === false) {
+            $message = 'Gagal menghapus foto profil.';
+            $messageType = 'error';
+        } else {
+            $avatar = '';
+            $message = 'Foto profil berhasil dihapus!';
+            if (str_starts_with($oldAvatar, 'uploads/avatars/') && strpos($oldAvatar, '..') === false) {
+                $oldPath = __DIR__ . '/../' . $oldAvatar;
+                if (is_file($oldPath)) {
+                    @unlink($oldPath);
+                }
+            }
+        }
+    }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? $name);
     $email = trim($_POST['email'] ?? $email);
     $phone = trim($_POST['phone'] ?? $phone);
@@ -166,120 +199,115 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </header>
 
         <main class="main-content">
-            <div class="tabs-container">
-                <button type="button" class="tab-button active" data-tab="data-diri">Data Diri</button>
-                <button type="button" class="tab-button" data-tab="informasi-akun">Informasi Akun</button>
-                <button type="button" class="tab-button" data-tab="keamanan">Keamanan</button>
-            </div>
-
             <?php if (!empty($message)): ?>
                 <div class="toast-alert show <?= $messageType === 'error' ? 'error' : 'success' ?>">
                     <?= htmlspecialchars($message) ?>
                 </div>
             <?php endif; ?>
 
-            <div class="tab-content active" id="tab-data-diri">
-                <div class="profile-card">
-                    <div class="profile-card-header">
-                        <div class="profile-user-info">
-                            <?php if (!empty($avatar)): ?>
-                                <img src="../<?= htmlspecialchars($avatar) ?>" class="profile-avatar-placeholder" style="object-fit: cover;" alt="Foto profil">
-                            <?php else: ?>
-                                <div class="profile-avatar-placeholder"></div>
-                            <?php endif; ?>
-                            <div class="profile-name-group">
-                                <h2 class="profile-name"><?= htmlspecialchars($name) ?></h2>
-                                <p class="profile-role"><?= htmlspecialchars($position) ?></p>
-                            </div>
+            <div class="profile-card profile-card-top">
+                <div class="profile-card-header">
+                    <div class="profile-user-info">
+                        <?php if (!empty($avatar)): ?>
+                            <img src="../<?= htmlspecialchars($avatar) ?>" class="profile-avatar-placeholder" style="object-fit: cover;" alt="Foto profil">
+                        <?php else: ?>
+                            <div class="profile-avatar-placeholder"></div>
+                        <?php endif; ?>
+                        <div class="profile-name-group">
+                            <h2 class="profile-name"><?= htmlspecialchars($name) ?></h2>
+                            <p class="profile-role"><?= htmlspecialchars($position) ?></p>
                         </div>
-
-                        <button type="button" class="btn-edit-profile" id="btnOpenEditModal">
-                            Edit Profil
-                        </button>
                     </div>
 
-                    <h3 class="card-section-title">Data Diri</h3>
-
-                    <div class="data-table-wrapper">
-                        <table class="data-table">
-                            <tbody>
-                                <tr>
-                                    <td class="col-label">Email</td>
-                                    <td class="col-value"><?= htmlspecialchars($email) ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-label">No. HP</td>
-                                    <td class="col-value"><?= htmlspecialchars($phone) ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-label">Alamat</td>
-                                    <td class="col-value"><?= htmlspecialchars($address) ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-label">Tanggal Lahir</td>
-                                    <td class="col-value"><?= htmlspecialchars($birthDate) ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-label">Jenis Kelamin</td>
-                                    <td class="col-value"><?= htmlspecialchars($gender) ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-label">ID Admin</td>
-                                    <td class="col-value"><?= htmlspecialchars($adminId) ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-label">Jabatan</td>
-                                    <td class="col-value"><?= htmlspecialchars($position) ?></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <button type="button" class="btn-edit-profile" id="btnOpenEditModal">
+                        Edit Profil
+                    </button>
                 </div>
             </div>
 
-            <div class="tab-content" id="tab-informasi-akun">
-                <div class="profile-card">
-                    <h3 class="card-section-title" style="margin-top: 0;">Informasi Akun</h3>
-                    <div class="data-table-wrapper">
-                        <table class="data-table">
-                            <tbody>
-                                <tr>
-                                    <td class="col-label">Username</td>
-                                    <td class="col-value"><?= htmlspecialchars($username) ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-label">Role Akses</td>
-                                    <td class="col-value"><?= htmlspecialchars($position) ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-label">Status Akun</td>
-                                    <td class="col-value">
-                                        <span class="badge-status-active">Aktif</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="profile-card">
+                <h3 class="card-section-title">Data Diri</h3>
+                <p class="card-section-subtitle">Informasi pribadi admin</p>
+
+                <div class="data-table-wrapper">
+                    <table class="data-table">
+                        <tbody>
+                            <tr>
+                                <td class="col-label">Email</td>
+                                <td class="col-value"><?= htmlspecialchars($email) ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-label">No. HP</td>
+                                <td class="col-value"><?= htmlspecialchars($phone) ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-label">Alamat</td>
+                                <td class="col-value"><?= htmlspecialchars($address) ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-label">Tanggal Lahir</td>
+                                <td class="col-value"><?= htmlspecialchars($birthDate) ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-label">Jenis Kelamin</td>
+                                <td class="col-value"><?= htmlspecialchars($gender) ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-label">ID Admin</td>
+                                <td class="col-value"><?= htmlspecialchars($adminId) ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-label">Jabatan</td>
+                                <td class="col-value"><?= htmlspecialchars($position) ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <div class="tab-content" id="tab-keamanan">
-                <div class="profile-card">
-                    <h3 class="card-section-title" style="margin-top: 0;">Keamanan & Sandi</h3>
-                    <div class="data-table-wrapper">
-                        <table class="data-table">
-                            <tbody>
-                                <tr>
-                                    <td class="col-label">Password</td>
-                                    <td class="col-value">••••••••••••</td>
-                                </tr>
-                                <tr>
-                                    <td class="col-label">Autentikasi 2 Faktor</td>
-                                    <td class="col-value">Aktif</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="profile-card">
+                <h3 class="card-section-title">Informasi Akun</h3>
+                <p class="card-section-subtitle">Detail akun dan hak akses</p>
+
+                <div class="data-table-wrapper">
+                    <table class="data-table">
+                        <tbody>
+                            <tr>
+                                <td class="col-label">Username</td>
+                                <td class="col-value"><?= htmlspecialchars($username) ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-label">Role Akses</td>
+                                <td class="col-value"><?= htmlspecialchars($position) ?></td>
+                            </tr>
+                            <tr>
+                                <td class="col-label">Status Akun</td>
+                                <td class="col-value">
+                                    <span class="badge-status-active">Aktif</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <h3 class="card-section-title">Keamanan & Sandi</h3>
+                <p class="card-section-subtitle">Pengaturan keamanan akun</p>
+
+                <div class="data-table-wrapper">
+                    <table class="data-table">
+                        <tbody>
+                            <tr>
+                                <td class="col-label">Password</td>
+                                <td class="col-value">••••••••••••</td>
+                            </tr>
+                            <tr>
+                                <td class="col-label">Autentikasi 2 Faktor</td>
+                                <td class="col-value">Aktif</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </main>
@@ -297,6 +325,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-group">
                         <label for="inputAvatar">Foto Profil</label>
                         <input type="file" id="inputAvatar" name="avatar" accept="image/png,image/jpeg,image/webp">
+                        <?php if (!empty($avatar)): ?>
+                            <button type="submit" form="deleteAvatarForm" class="btn-delete-avatar" onclick="return confirm('Hapus foto profil?');">Hapus foto profil</button>
+                        <?php endif; ?>
                     </div>
 
                     <div class="form-group">
@@ -353,6 +384,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
         </div>
     </div>
+
+    <form id="deleteAvatarForm" method="POST" action="profile.php" style="display: none;">
+        <input type="hidden" name="delete_avatar" value="1">
+    </form>
 
     <script src="../sidebarAdmin/script.js"></script>
     <script src="script.js"></script>

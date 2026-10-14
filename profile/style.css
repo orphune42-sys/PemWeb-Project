@@ -30,7 +30,7 @@ body {
 .main-content {
   flex: 1;
   overflow-y: auto;
-  padding: 28px 32px;
+  padding: 24px 28px;
   background-color: #F6FCFF;
 }
 
@@ -182,58 +182,23 @@ body {
     color: #64748b;
 }
 
-.tabs-container {
-    display: flex;
-    align-items: center;
-    gap: 28px;
-    margin-bottom: 24px;
-    border-bottom: 1px solid transparent;
-}
-
-.tab-button {
-    background: none;
-    border: none;
-    font-size: 15px;
-    font-weight: 600;
-    color: #334155;
-    padding: 8px 4px 10px 4px;
-    cursor: pointer;
-    position: relative;
-    transition: color 0.2s ease;
-}
-
-.tab-button:hover {
-    color: #388da8;
-}
-
-.tab-button.active {
-    color: #388da8;
-}
-
-.tab-button.active::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background-color: #388da8;
-    border-radius: 2px;
-}
-
-.tab-content {
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-}
-
 .profile-card {
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 18px;
-    padding: 34px 38px 38px 38px;
+    border-radius: 14px;
+    padding: 24px 28px 28px 28px;
+}
+
+.profile-card + .profile-card {
+    margin-top: 16px;
+}
+
+.profile-card-top {
+    padding: 20px 28px;
+}
+
+.profile-card-top .profile-card-header {
+    margin-bottom: 0;
 }
 
 .profile-card-header {
@@ -246,12 +211,12 @@ body {
 .profile-user-info {
     display: flex;
     align-items: center;
-    gap: 22px;
+    gap: 18px;
 }
 
 .profile-avatar-placeholder {
-    width: 80px;
-    height: 80px;
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
     background-color: #d8d8d8;
     flex-shrink: 0;
@@ -263,15 +228,15 @@ body {
 }
 
 .profile-name {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     color: #000000;
     line-height: 1.2;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .profile-role {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 400;
     color: #374151;
 }
@@ -280,8 +245,8 @@ body {
     background-color: #ffffff;
     border: 1.5px solid #d1d5db;
     border-radius: 8px;
-    padding: 8px 20px;
-    font-size: 14.5px;
+    padding: 8px 18px;
+    font-size: 13.5px;
     font-weight: 500;
     color: #111827;
     cursor: pointer;
@@ -294,10 +259,16 @@ body {
 }
 
 .card-section-title {
-    font-size: 21px;
+    font-size: 17px;
     font-weight: 700;
     color: #000000;
-    margin-bottom: 18px;
+    margin-bottom: 2px;
+}
+
+.card-section-subtitle {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 16px;
 }
 
 /* ---------------- Data Table ---------------- */
@@ -322,8 +293,8 @@ body {
 }
 
 .data-table td {
-    padding: 15px 22px;
-    font-size: 15px;
+    padding: 12px 18px;
+    font-size: 14px;
     line-height: 1.5;
 }
 
@@ -346,7 +317,7 @@ body {
     border-radius: 12px;
     background-color: #dcfce7;
     color: #166534;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
 }
 
@@ -354,8 +325,8 @@ body {
     display: none;
     padding: 12px 18px;
     border-radius: 8px;
-    margin-bottom: 20px;
-    font-size: 14.5px;
+    margin-bottom: 16px;
+    font-size: 14px;
     font-weight: 500;
 }
 
@@ -485,6 +456,23 @@ body {
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus {
     border-color: #388da8;
     box-shadow: 0 0 0 3px rgba(56, 141, 168, 0.15);
+}
+
+.btn-delete-avatar {
+    align-self: flex-start;
+    padding: 6px 12px;
+    border: 1px solid #fecaca;
+    background: #ffffff;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #b91c1c;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-delete-avatar:hover {
+    background-color: #fef2f2;
 }
 
 .modal-footer {

@@ -19,19 +19,26 @@
     },
     {
         "id": "usr_ef7e9d07687e",
-        "name": "admin fyp",
+        "name": "admin",
         "email": "adminfyp@gmail.com",
         "username": "admin_fyp",
-        "password": "$2y$10$pFLvaUaRwNbwpkEscaAY9OLt.ZEjjqDX9CG6y7TIFwTHsc63\/E.Hq", 
+        "password": "$2y$10$pFLvaUaRwNbwpkEscaAY9OLt.ZEjjqDX9CG6y7TIFwTHsc63\/E.Hq",
         "role": "admin",
-        "created_at": "2026-10-07 08:25:48"
+        "created_at": "2026-10-07 08:25:48",
+        "phone": "081234567890",
+        "address": "Jl. Melati No. 12, Malang",
+        "birth_date": "12 Mei 2000",
+        "gender": "Perempuan",
+        "admin_id": "ADM-1024",
+        "position": "Administrator",
+        "avatar": "uploads\/avatars\/0e21758c486a1317.jpg"
     },
     {
         "id": "usr_372d20a3cf91",
         "name": "nana",
         "email": "nana@gmail.com",
         "username": "nana_nana",
-        "password": "$2y$10$WazMi0yrUJcPYZaYTmNzt.sfUbPgqgKEr06FzGpgN3O\/lIM7ddOwy", 
+        "password": "$2y$10$WazMi0yrUJcPYZaYTmNzt.sfUbPgqgKEr06FzGpgN3O\/lIM7ddOwy",
         "role": "admin",
         "created_at": "2026-10-07 13:42:16"
     },
