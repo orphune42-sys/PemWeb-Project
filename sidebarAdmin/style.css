@@ -8,7 +8,7 @@
 .fyp-sidebar {
     width: 230px;
     min-width: 230px;
-    background-color: #27566A;
+    background-color: #ffffff;
     border-right: 1px solid #edf2f7;
     min-height: 100vh;
     display: flex;
@@ -75,7 +75,7 @@
     border-radius: 8px;
     font-size: 15px;
     font-weight: 500;
-    color: #718096;
+    color: #475569;
     text-decoration: none;
     transition: all 0.2s ease;
     user-select: none;
@@ -83,7 +83,7 @@
 
 .nav-link:hover {
     color: #1e293b;
-    background-color: #f7fafc;
+    background-color: #f1f7fa;
 }
 
 .nav-link.active {
