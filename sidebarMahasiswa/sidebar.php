@@ -15,7 +15,7 @@ $menuItems = [
     [
     'key'   => 'profile',
     'title' => 'Profile',
-    'url'   => $basePath . 'profile-user/profile-user.php'
+    'url'   => $basePath . 'profile_user/profile_user.php'
     ],
 ];
 ?>

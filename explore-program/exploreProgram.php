@@ -85,34 +85,35 @@ $programs = [
 <body>
     <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
     <div class="dashboard-container">
-            <?php
-            $activeMenu = 'explore-program';
-            $basePath = '../';
-            include '../sidebarMahasiswa/sidebar.php';
-            ?>
+        <?php
+        $activeMenu = 'explore-program';
+        $basePath = '../';
+        include '../sidebarMahasiswa/sidebar.php';
+        ?>
         <main class="main-content">
-            <header class="top-header">
-                <button type="button" class="hamburger-btn" id="sidebarToggleBtn" aria-label="Buka Menu">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <line x1="3" y1="18" x2="21" y2="18"></line>
-                    </svg>
-                </button>
-
-                <h1 class="page-title">Explore Program</h1>
-                <div class="header-user">
-                    <button type="button" class="btn-icon" aria-label="Notifikasi">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            <header class="header">
+                <div class="header-left">
+                    <button type="button" class="hamburger-btn" id="sidebarToggleBtn" aria-label="Buka Menu">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
                         </svg>
                     </button>
-                    <div class="user-profile">
-                        <div class="avatar">H</div>
-                        <div class="user-info">
-                            <span class="user-name">Hafshah</span>
-                            <span class="user-role">Mahasiswa</span>
+                    <h1 class="header-title">Explore Program</h1>
+                </div>
+
+                <div class="header-right">
+                    <button type="button" class="header-notif" aria-label="Notifikasi">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.70006 15.7506C7.83172 15.9786 8.02108 16.168 8.24911 16.2996C8.47713 16.4313 8.73579 16.5006 8.99909 16.5006C9.26239 16.5006 9.52105 16.4313 9.74907 16.2996C9.9771 16.168 10.1665 15.9786 10.2981 15.7506M2.44596 11.4947C2.34798 11.6021 2.28332 11.7357 2.25984 11.8792C2.23637 12.0226 2.25509 12.1698 2.31373 12.3029C2.37237 12.4359 2.46841 12.549 2.59015 12.6285C2.71189 12.7079 2.8541 12.7502 2.99947 12.7504H14.9997C15.1451 12.7504 15.2873 12.7082 15.4091 12.6289C15.5309 12.5496 15.6271 12.4366 15.6859 12.3037C15.7447 12.1708 15.7636 12.0236 15.7403 11.8801C15.717 11.7366 15.6525 11.603 15.5547 11.4955C14.5572 10.4672 13.4997 9.37432 13.4997 5.99978C13.4997 4.80621 13.0256 3.66152 12.1816 2.81754C11.3377 1.97355 10.1931 1.4994 8.99959 1.4994C7.80609 1.4994 6.66148 1.97355 5.81755 2.81754C4.97361 3.66152 4.4995 4.80621 4.4995 5.99978C4.4995 9.37432 3.44123 10.4672 2.44596 11.4947Z" stroke="#27566A" stroke-width="1.8" stroke-linecap="round" />
+                        </svg>
+                    </button>
+                    <div class="header-user">
+                        <div class="header-avatar">N</div>
+                        <div class="header-userinfo">
+                            <span class="header-username">Naura</span>
+                            <span class="header-userrole">Mahasiswa</span>
                         </div>
                     </div>
                 </div>
@@ -202,7 +203,7 @@ $programs = [
                             <a href="../detail_program/detail_program.php?id=<?= urlencode($prog['id']) ?>" class="detail-link">
                                 Lihat Detail &rarr;
                             </a>
-                        </a>
+                            </a>
                         </div>
                     </div>
                 <?php endforeach; ?>
