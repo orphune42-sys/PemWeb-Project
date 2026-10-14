@@ -13,11 +13,6 @@ $menuItems = [
     'url'   => $basePath . 'explore-program/exploreProgram.php'
     ],
     [
-    'key'   => 'fine-opportunities',
-    'title' => 'Find Opportunities',
-    'url'   => $basePath . 'registration/findOpportunities.php'
-    ],
-    [
     'key'   => 'profile',
     'title' => 'Profile',
     'url'   => $basePath . 'profile-user/profile-user.php'
