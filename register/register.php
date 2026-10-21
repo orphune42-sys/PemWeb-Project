@@ -1,6 +1,20 @@
 <?php
+session_start();
+require __DIR__ . '/../koneksi.php';  
+
+if (isset($_SESSION['user'])) {
+    $role = $_SESSION['user']['role'] ?? 'mahasiswa';
+    if ($role === 'admin') {
+        header('Location: ../dashboard-admin/dashboardAdmin.php');
+    } else {
+        header('Location: ../dashboard-user/user.php');
+    }
+    exit;
+}
+
 $serverMessage = '';
 $serverSuccess = false;
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $rawInput = file_get_contents('php://input');
@@ -18,17 +32,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $inputData = $_POST;
     }
 
-    $name = trim($inputData['name'] ?? '');
-    $email = strtolower(trim($inputData['email'] ?? ''));
+    $name     = trim($inputData['name'] ?? '');
+    $email    = strtolower(trim($inputData['email'] ?? ''));
     $username = strtolower(trim($inputData['username'] ?? ''));
     $password = $inputData['password'] ?? '';
 
-    $dataFile = __DIR__ . '/../data/users.json';
-    $users = file_exists($dataFile) ? json_decode(file_get_contents($dataFile), true) : [];
-    if (!is_array($users)) $users = [];
+    $errorMessage = '';
 
-    if (empty($name) || empty($email) || empty($username) || empty($password)) {
+    if ($name === '' || $email === '' || $username === '' || $password === '') {
         $errorMessage = 'Semua bidang wajib diisi!';
+    } elseif (!preg_match('/^.{1,100}$/su', $name) || strlen($email) > 100 || strlen($username) > 100) {
+        $errorMessage = 'Nama, email, dan username maksimal 100 karakter!';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errorMessage = 'Format email tidak valid!';
     } elseif (strlen($username) < 3 || !preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
@@ -36,45 +50,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (strlen($password) < 5) {
         $errorMessage = 'Password minimal 5 karakter!';
     } else {
-        $emailExists = false;
-        $usernameExists = false;
+        try {
+            $cek = $pdo->prepare(
+                'SELECT email, username FROM `user`
+                  WHERE email = :email OR username = :username'
+            );
+            $cek->execute(['email' => $email, 'username' => $username]);
 
-        foreach ($users as $user) {
-            if (strtolower($user['email'] ?? '') === $email) {
-                $emailExists = true;
-                break;
+            $emailExists = false;
+            $usernameExists = false;
+            foreach ($cek->fetchAll() as $row) {
+                if (strtolower($row['email'] ?? '') === $email) {
+                    $emailExists = true;
+                }
+                if (strtolower($row['username'] ?? '') === $username) {
+                    $usernameExists = true;
+                }
             }
-            if (isset($user['username']) && strtolower($user['username']) === $username) {
-                $usernameExists = true;
-                break;
+
+            if ($emailExists) {
+                $errorMessage = 'Email sudah terdaftar. Silakan login atau gunakan email lain!';
+            } elseif ($usernameExists) {
+                $errorMessage = 'Username sudah digunakan. Silakan pilih username lain!';
+            } else {
+                $newUser = $pdo->prepare(
+                    'INSERT INTO `user` (name, email, username, password, role)
+                     VALUES (:name, :email, :username, :password, :role)'
+                );
+                $newUser->execute([
+                    'name'     => $name,
+                    'email'    => $email,
+                    'username' => $username,
+                    'password' => password_hash($password, PASSWORD_DEFAULT),
+                    'role'     => 'mahasiswa'  
+                ]);
+
+                $serverSuccess = true;
+                $serverMessage = 'Pendaftaran berhasil! Mengalihkan ke halaman login...';
             }
-        }
+        } catch (PDOException $e) {
+            error_log('Register gagal: ' . $e->getMessage());
 
-        if ($emailExists) {
-            $errorMessage = 'Email sudah terdaftar. Silakan login atau gunakan email lain!';
-        } elseif ($usernameExists) {
-            $errorMessage = 'Username sudah digunakan. Silakan pilih username lain!';
-        } else {
-            $newUser = [
-                'id' => 'usr_' . bin2hex(random_bytes(6)),
-                'name' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8'),
-                'email' => $email,
-                'username' => $username,
-                'password' => password_hash($password, PASSWORD_DEFAULT),
-                'role' => 'mahasiswa',
-                'created_at' => date('Y-m-d H:i:s')
-            ];
-
-            $users[] = $newUser;
-            file_put_contents($dataFile, json_encode($users, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), LOCK_EX);
-
-            $serverSuccess = true;
-            $serverMessage = 'Pendaftaran berhasil! Mengalihkan ke halaman login...';
+            if ($e->getCode() === '23000') {
+                $errorMessage = 'Email atau username sudah digunakan!';
+            } else {
+                $errorMessage = 'Terjadi kesalahan pada server. Silakan coba lagi nanti.';
+            }
         }
     }
 
-    if (!$serverSuccess && empty($serverMessage)) {
-        $serverMessage = $errorMessage ?? 'Terjadi kesalahan saat mendaftar.';
+    if (!$serverSuccess) {
+        $serverMessage = $errorMessage !== '' ? $errorMessage : 'Terjadi kesalahan saat mendaftar.';
     }
 
     if ($isJson) {
@@ -89,12 +115,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - FindYourPath</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="bg-blob blob-1"></div>
     <div class="bg-blob blob-2"></div>
@@ -113,12 +141,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="illustration-box">
-                <img 
-                    src="../assets/assest_login_register.png" 
-                    alt="FindYourPath Illustration" 
+                <img
+                    src="../assets/assest_login_register.png"
+                    alt="FindYourPath Illustration"
                     class="hero-illustration"
-                    id="heroIllustration"
-                >
+                    id="heroIllustration">
             </div>
         </div>
 
@@ -129,59 +156,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <form id="registerForm" method="POST" action="register.php" novalidate>
                 <div class="form-group">
-                    <input 
-                        type="text" 
-                        name="name" 
-                        id="name" 
-                        class="form-control" 
-                        placeholder="Nama Lengkap" 
-                        required 
-                        autocomplete="name"
-                    >
+                    <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        class="form-control"
+                        placeholder="Nama Lengkap"
+                        required
+                        autocomplete="name">
                 </div>
 
                 <div class="form-group">
-                    <input 
-                        type="email" 
-                        name="email" 
-                        id="email" 
-                        class="form-control" 
-                        placeholder="Email" 
-                        required 
-                        autocomplete="email"
-                    >
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        class="form-control"
+                        placeholder="Email"
+                        required
+                        autocomplete="email">
                 </div>
 
                 <div class="form-group">
-                    <input 
-                        type="text" 
-                        name="username" 
-                        id="username" 
-                        class="form-control" 
-                        placeholder="Username" 
-                        required 
-                        autocomplete="username"
-                    >
+                    <input
+                        type="text"
+                        name="username"
+                        id="username"
+                        class="form-control"
+                        placeholder="Username"
+                        required
+                        autocomplete="username">
                 </div>
 
                 <div class="form-group">
                     <div class="password-wrapper">
-                        <input 
-                            type="password" 
-                            name="password" 
-                            id="password" 
-                            class="form-control" 
-                            placeholder="Password" 
-                            required 
-                            autocomplete="new-password"
-                        >
-                        <button 
-                            type="button" 
-                            id="togglePassword" 
-                            class="password-toggle" 
-                            title="Tampilkan / Sembunyikan Password" 
-                            aria-label="Toggle password visibility"
-                        >
+                        <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            class="form-control"
+                            placeholder="Password"
+                            required
+                            autocomplete="new-password">
+                        <button
+                            type="button"
+                            id="togglePassword"
+                            class="password-toggle"
+                            title="Tampilkan / Sembunyikan Password"
+                            aria-label="Toggle password visibility">
                             <svg class="eye-icon" id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
@@ -203,4 +225,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <script src="script.js"></script>
 </body>
+
 </html>

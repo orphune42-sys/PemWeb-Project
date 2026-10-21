@@ -1,5 +1,6 @@
 <?php
 session_start();
+require __DIR__ . '/koneksi.php';
 
 if (isset($_SESSION['user'])) {
     $role = $_SESSION['user']['role'] ?? 'mahasiswa';
@@ -33,22 +34,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = strtolower(trim($inputData['email'] ?? ''));
     $password = $inputData['password'] ?? '';
 
-    $dataFile = __DIR__ . '/data/users.json';
-    $users = file_exists($dataFile) ? json_decode(file_get_contents($dataFile), true) : [];
-    if (!is_array($users)) $users = [];
-
+    $dbError = false;
     $userFound = null;
-    if (!empty($email) && !empty($password)) {
-        foreach ($users as $user) {
-            $userEmail = strtolower($user['email'] ?? '');
-            $userUsername = strtolower($user['username'] ?? '');
 
-            if ($userEmail === $email || $userUsername === $email) {
-                if (password_verify($password, $user['password'])) {
-                    $userFound = $user;
-                    break;
-                }
+    if ($email !== '' && $password !== '') {
+        try {
+            $stmt = $pdo->prepare(
+                'SELECT id, name, email, username, password, role FROM `user`
+                  WHERE email = :email LIMIT 1'
+            );
+            $stmt->execute(['email' => $email]);
+
+            $row = $stmt->fetch();
+
+            if ($row && password_verify($password, $row['password'])) {
+                $userFound = $row;
             }
+        } catch (PDOException $e) {
+            error_log('Login gagal: ' . $e->getMessage());
+            $dbError = true;
         }
     }
 
@@ -56,7 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $userRole = strtolower($userFound['role'] ?? 'mahasiswa');
         $targetRedirect = ($userRole === 'admin') ? 'dashboard-admin/dashboardAdmin.php' : 'dashboard-user/user.php';
 
+        session_regenerate_id(true);
         $_SESSION['user'] = [
+            'id'    => $userFound['id'],
             'name'  => $userFound['name'],
             'email' => $userFound['email'],
             'role'  => $userRole
@@ -75,10 +81,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: ' . $targetRedirect);
         exit;
     } else {
-        $errorMessage = empty($email) || empty($password)
-            ? 'Email/Username dan password tidak boleh kosong!'
-            : 'Email/Username atau password yang Anda masukkan salah!';
-
+        if ($dbError) {
+            $errorMessage = 'Terjadi kesalahan pada server. Silakan coba lagi nanti.';
+        } else {
+            $errorMessage = empty($email) || empty($password)
+                ? 'Email dan password tidak boleh kosong!'
+                : 'Email atau password yang Anda masukkan salah!';
+        }
         if ($isJson) {
             header('Content-Type: application/json; charset=UTF-8');
             echo json_encode([
@@ -140,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         name="email"
                         id="email"
                         class="form-control"
-                        placeholder="Email atau Username"
+                        placeholder="Email"
                         required
                         autocomplete="username">
                 </div>
