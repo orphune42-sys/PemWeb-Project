@@ -73,6 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } elseif ($usernameExists) {
                 $errorMessage = 'Username sudah digunakan. Silakan pilih username lain!';
             } else {
+                $pdo->beginTransaction();
+                
                 $newUser = $pdo->prepare(
                     'INSERT INTO `user` (name, email, username, password, role)
                      VALUES (:name, :email, :username, :password, :role)'
@@ -84,6 +86,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'password' => password_hash($password, PASSWORD_DEFAULT),
                     'role'     => 'mahasiswa'  
                 ]);
+
+                $userId = $pdo->lastInsertId();
+
+                $newMahasiswa = $pdo->prepare(
+                    'INSERT INTO `mahasiswa` (user_id)
+                     VALUES (:user_id)'
+                );
+
+                $newMahasiswa->execute([
+                    'user_id' => $userId
+                ]);
+
+                $pdo->commit();
 
                 $serverSuccess = true;
                 $serverMessage = 'Pendaftaran berhasil! Mengalihkan ke halaman login...';

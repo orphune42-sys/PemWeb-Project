@@ -30,6 +30,7 @@ try {
     } else {
         echo $pesan;
     }
+    exit;
 }
 
 unset($password, $dsn, $options);
