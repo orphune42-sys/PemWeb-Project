@@ -5,14 +5,12 @@ class ScheduleManagementController {
     private Schedule $scheduleModel;
     private string $baseUrl;
 
-    public function __construct(string $baseUrl)
-    {
+    public function __construct(string $baseUrl) {
         $this->scheduleModel = new Schedule();
         $this->baseUrl = $baseUrl;
     }
 
-    public function index(): void
-    {
+    public function index(): void {
         $message = '';
         $messageType = 'success';
 

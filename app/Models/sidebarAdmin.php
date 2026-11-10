@@ -1,8 +1,6 @@
 <?php
-class SidebarAdmin
-{
-    public function getMenuItems(string $baseUrl): array
-    {
+class SidebarAdmin {
+    public function getMenuItems(string $baseUrl): array {
         return [
             [
                 'key'   => 'dashboard',

@@ -29,7 +29,7 @@
 
                     </button>
                     <div class="header-user">
-                        <?php if (!empty($avatar) && is_file(__DIR__ . '/../' . $avatar)): ?>
+                        <?php if (!empty($avatar) && is_file(dirname(__DIR__, 3) . '/' . $avatar)): ?>
                             <img src="<?= $baseUrl ?>/<?= htmlspecialchars($avatar) ?>" class="header-avatar" style="object-fit:cover; border-radius: 50%; width: 36px; height: 36px;" alt="Avatar">
                         <?php else: ?>
                             <div class="header-avatar"><?= htmlspecialchars(strtoupper(substr($name ?: $username, 0, 1))) ?></div>
@@ -53,8 +53,8 @@
                 <div class="profile-card profile-card-top">
                     <div class="profile-card-header">
                         <div class="profile-user-info">
-                            <?php if (!empty($avatar) && is_file(__DIR__ . '/../' . $avatar)): ?>
-                                <img src="../<?= htmlspecialchars($avatar) ?>" class="profile-avatar-placeholder" style="object-fit: cover;" alt="Foto profil">
+                            <?php if (!empty($avatar) && is_file(dirname(__DIR__, 3) . '/' . $avatar)): ?>
+                                <img src="<?= $baseUrl ?>/<?= htmlspecialchars($avatar) ?>" class="profile-avatar-placeholder" style="object-fit: cover;" alt="Foto profil">
                             <?php else: ?>
                                 <div class="profile-avatar-placeholder">
                                     <?= htmlspecialchars(strtoupper(substr($name ?: $username, 0, 1))) ?>

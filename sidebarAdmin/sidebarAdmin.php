@@ -15,7 +15,7 @@ $menuItems = [
     [
     'key'   => 'schedule',
     'title' => 'Schedule',
-    'url'   => $basePath . 'schedule/scheduleManagement.php'
+    'url'   => $basePath . 'public/index.php?page=schedule'
     ],
     [
     'key'   => 'registration',
@@ -25,7 +25,7 @@ $menuItems = [
     [
     'key'   => 'profile',
     'title' => 'Profile',
-    'url'   => $basePath . 'profile/profilAdmin.php'
+    'url'   => $basePath . 'public/index.php?page=profile-admin'
     ],
 ];
 ?>

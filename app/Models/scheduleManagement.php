@@ -1,15 +1,12 @@
 <?php
-class Schedule
-{
+class Schedule {
     private string $dataFile;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->dataFile = dirname(__DIR__, 2) . '/data/schedules.json';
     }
 
-    public function getAll(): array
-    {
+    public function getAll(): array {
         if (!file_exists($this->dataFile)) {
             return [];
         }
@@ -17,8 +14,7 @@ class Schedule
         return is_array($data) ? $data : [];
     }
 
-    public function create(array $data): bool
-    {
+    public function create(array $data): bool {
         $schedules = $this->getAll();
         $newSchedule = [
             'id'          => 'sch_' . bin2hex(random_bytes(5)),
@@ -35,8 +31,7 @@ class Schedule
         return (bool) file_put_contents($this->dataFile, json_encode($schedules, JSON_PRETTY_PRINT));
     }
 
-    public function update(string $id, array $data): bool
-    {
+    public function update(string $id, array $data): bool {
         $schedules = $this->getAll();
         $found = false;
         foreach ($schedules as &$sch) {
@@ -60,8 +55,7 @@ class Schedule
         return false;
     }
 
-    public function delete(string $id): bool
-    {
+    public function delete(string $id): bool {
         $schedules = $this->getAll();
         $initialCount = count($schedules);
         $schedules = array_values(array_filter($schedules, fn($sch) => ($sch['id'] ?? '') !== $id));
@@ -71,8 +65,7 @@ class Schedule
         return false;
     }
 
-    public function formatTanggalIndo(?string $dateStr): string
-    {
+    public function formatTanggalIndo(?string $dateStr): string {
         if (empty($dateStr)) return '-';
         $timestamp = strtotime($dateStr);
         if (!$timestamp) return $dateStr;
@@ -86,8 +79,7 @@ class Schedule
         return "$d $m $y";
     }
 
-    public function formatPeriodeIndo(?string $start, ?string $end): string
-    {
+    public function formatPeriodeIndo(?string $start, ?string $end): string {
         if (empty($start) && empty($end)) return '-';
         if (!empty($start) && !empty($end)) {
             return $this->formatTanggalIndo($start) . ' - ' . $this->formatTanggalIndo($end);
