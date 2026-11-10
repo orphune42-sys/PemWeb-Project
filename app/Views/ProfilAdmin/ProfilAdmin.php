@@ -1,193 +1,3 @@
-<?php
-session_start();
-require __DIR__ . '/../koneksi.php';
-
-if (!isset($_SESSION['user']) || ($_SESSION['user']['role'] ?? '') !== 'admin') {
-    header('Location: ../login.php');
-    exit;
-}
-
-$userId = $_SESSION['user']['id'];
-$message = '';
-$messageType = 'success';
-
-try {
-    $stmt = $pdo->prepare("
-        SELECT u.username, u.email, u.name, u.role, 
-            a.admin_id, a.position, a.phone, a.address, a.birth_date, a.gender, a.avatar 
-        FROM `user` u 
-        LEFT JOIN `admin` a ON u.id = a.user_id 
-        WHERE u.id = :id
-    ");
-    $stmt->execute(['id' => $userId]);
-    $user = $stmt->fetch();
-
-    if (!$user) {
-        session_destroy();
-        header('Location: ../login.php');
-        exit;
-    }
-} catch (PDOException $e) {
-    error_log("Fetch Admin Error: " . $e->getMessage());
-    die("Terjadi kesalahan pada sistem.");
-}
-
-$oldAvatar = $user['avatar'] ?? '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_avatar'])) {
-    if (!empty($oldAvatar)) {
-        $avatarPath = __DIR__ . '/../' . $oldAvatar;
-        if (is_file($avatarPath)) {
-            @unlink($avatarPath);
-        }
-        try {
-            $stmt = $pdo->prepare("UPDATE `admin` SET avatar = '' WHERE user_id = :user_id");
-            $stmt->execute(['user_id' => $userId]);
-            $message = "Foto profil berhasil dihapus!";
-        } catch (PDOException $e) {
-            error_log("Delete Avatar Error: " . $e->getMessage());
-            $message = "Gagal menghapus foto profil.";
-            $messageType = "error";
-        }
-    } else {
-        $message = 'Tidak ada foto profil untuk dihapus.';
-        $messageType = 'error';
-    }
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['delete_avatar']) && !isset($_POST['delete_account'])) {
-    $name      = trim($_POST['name'] ?? $user['name'] ?? '');
-    $email     = trim($_POST['email'] ?? $user['email'] ?? '');
-    $phone     = trim($_POST['phone'] ?? $user['phone'] ?? '');
-    $address   = trim($_POST['address'] ?? $user['address'] ?? '');
-    $birthDate = trim($_POST['birth_date'] ?? $user['birth_date'] ?? '');
-    $gender    = trim($_POST['gender'] ?? $user['gender'] ?? '');
-    $adminId   = trim($_POST['admin_id'] ?? $user['admin_id'] ?? '');
-    $position  = trim($_POST['position'] ?? $user['position'] ?? '');
-
-    $newAvatarPath = $oldAvatar;
-    $uploadError = '';
-
-    if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] !== UPLOAD_ERR_NO_FILE) {
-        $file = $_FILES['avatar'];
-
-        if ($file['error'] !== UPLOAD_ERR_OK) {
-            $uploadError = ($file['error'] === UPLOAD_ERR_INI_SIZE || $file['error'] === UPLOAD_ERR_FORM_SIZE)
-                ? 'Ukuran foto terlalu besar (Maks 2MB).'
-                : 'Upload foto gagal, silakan coba lagi.';
-        } else {
-            $allowed = [
-                'image/jpeg' => 'jpg',
-                'image/png'  => 'png',
-                'image/webp' => 'webp',
-            ];
-            $finfo = new finfo(FILEINFO_MIME_TYPE);
-            $mime  = $finfo->file($file['tmp_name']);
-
-            if (!isset($allowed[$mime])) {
-                $uploadError = 'Format foto harus JPG, PNG, atau WEBP.';
-            } elseif ($file['size'] > 2 * 1024 * 1024) {
-                $uploadError = 'Ukuran foto maksimal 2 MB.';
-            } else {
-                $uploadDir = __DIR__ . '/../uploads/avatars/';
-                if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true)) {
-                    $uploadError = 'Folder upload tidak dapat dibuat.';
-                } else {
-                    $newName = 'avatar_admin_' . $userId . '_' . bin2hex(random_bytes(4)) . '.' . $allowed[$mime];
-                    if (move_uploaded_file($file['tmp_name'], $uploadDir . $newName)) {
-                        $newAvatarPath = 'uploads/avatars/' . $newName;
-
-                        if (!empty($oldAvatar) && is_file(__DIR__ . '/../' . $oldAvatar)) {
-                            @unlink(__DIR__ . '/../' . $oldAvatar);
-                        }
-                    } else {
-                        $uploadError = 'Foto gagal disimpan di server.';
-                    }
-                }
-            }
-        }
-    }
-
-    if ($uploadError !== '') {
-        $message = $uploadError;
-        $messageType = 'error';
-    } else {
-        try {
-            $pdo->beginTransaction();
-
-            $stmtUser = $pdo->prepare("UPDATE `user` SET name = :name, email = :email WHERE id = :id");
-            $stmtUser->execute(['name' => $name, 'email' => $email, 'id' => $userId]);
-
-            $stmtAdmin = $pdo->prepare("INSERT INTO `admin` (user_id, phone, address, birth_date, gender, admin_id, position, avatar)
-                VALUES (:user_id, :phone, :address, :birth_date, :gender, :admin_id, :position, :avatar)
-                ON DUPLICATE KEY UPDATE phone = VALUES(phone), address = VALUES(address), birth_date = VALUES(birth_date),
-                    gender = VALUES(gender), admin_id = VALUES(admin_id), position = VALUES(position), avatar = VALUES(avatar)
-            ");
-
-            $stmtAdmin->execute([
-                'user_id'    => $userId,
-                'phone'      => $phone,
-                'address'    => $address,
-                'birth_date' => $birthDate,
-                'gender'     => $gender,
-                'admin_id'   => $adminId,
-                'position'   => $position,
-                'avatar'     => $newAvatarPath
-            ]);
-
-            $pdo->commit();
-            $message = 'Profil berhasil disimpan!';
-        } catch (PDOException $e) {
-            $pdo->rollBack();
-            error_log('Update Admin Profile Error: ' . $e->getMessage());
-            $message = 'Gagal menyimpan profil ke database.';
-            $messageType = 'error';
-        }
-    }
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_account'])) {
-    try {
-        if (!empty($oldAvatar) && is_file(__DIR__ . '/../' . $oldAvatar)) {
-            @unlink(__DIR__ . '/../' . $oldAvatar);
-        }
-
-        $deleteStmt = $pdo->prepare("DELETE FROM `user` WHERE id = :id");
-        $deleteStmt->execute(['id' => $userId]);
-
-        session_unset();
-        session_destroy();
-        header('Location: ../login.php?status=deleted');
-        exit;
-    } catch (PDOException $e) {
-        error_log('Delete Admin Account Error: ' . $e->getMessage());
-        $message = 'Gagal menghapus akun.';
-        $messageType = 'error';
-    }
-}
-
-try {
-    $stmt = $pdo->prepare("SELECT u.username, u.email, u.role, 
-    a.name, a.admin_id, a.position, a.phone, a.address, a.birth_date, a.gender, a.avatar 
-    FROM `user` u
-    LEFT JOIN `admin` a ON u.id = a.user_id
-    WHERE u.id = :id");
-
-    $stmt->execute(['id' => $userId]);
-    $user = $stmt->fetch();
-} catch (PDOException $e) {
-    error_log('Re-fetch Admin Error: ' . $e->getMessage());
-}
-
-$name       = $user['name'] ?? '';
-$email      = $user['email'] ?? '';
-$phone      = $user['phone'] ?? '-';
-$address    = $user['address'] ?? '-';
-$birthDate  = $user['birth_date'] ?? '-';
-$gender     = $user['gender'] ?? '-';
-$adminId    = $user['admin_id'] ?? 'ADM-1024';
-$position   = $user['position'] ?? 'Administrator';
-$username   = $user['username'] ?? '';
-$avatar     = $user['avatar'] ?? '';
-
-?>
-
 <!DOCTYPE html>
 <html lang="id">
 
@@ -198,16 +8,15 @@ $avatar     = $user['avatar'] ?? '';
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../sidebarAdmin/style.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="<?= $baseUrl ?>/public/css/sidebarAdmin.css">
+    <link rel="stylesheet" href="<?= $baseUrl ?>/public/css/profilAdmin.css">
 </head>
 
 <body>
     <div class="layout-wrapper">
-        <?php
-        $activeMenu = 'profile';
-        $basePath = '../';
-        include '../sidebarAdmin/sidebar.php';
+        <?php 
+        require_once __DIR__ . '/../../Controllers/SidebarAdminController.php'; 
+        (new SidebarAdminController())->render('profile', $baseUrl);
         ?>
         <div class="main-wrapper">
             <header class="header">
@@ -221,7 +30,7 @@ $avatar     = $user['avatar'] ?? '';
                     </button>
                     <div class="header-user">
                         <?php if (!empty($avatar) && is_file(__DIR__ . '/../' . $avatar)): ?>
-                            <img src="../<?= htmlspecialchars($avatar) ?>" class="header-avatar" style="object-fit:cover; border-radius: 50%; width: 36px; height: 36px;" alt="Avatar">
+                            <img src="<?= $baseUrl ?>/<?= htmlspecialchars($avatar) ?>" class="header-avatar" style="object-fit:cover; border-radius: 50%; width: 36px; height: 36px;" alt="Avatar">
                         <?php else: ?>
                             <div class="header-avatar"><?= htmlspecialchars(strtoupper(substr($name ?: $username, 0, 1))) ?></div>
                         <?php endif; ?>
@@ -358,7 +167,7 @@ $avatar     = $user['avatar'] ?? '';
                 <h3 class="modal-title">Edit Data Diri</h3>
                 <button type="button" class="modal-close-btn" id="btnCloseEditModal">&times;</button>
             </div>
-            <form method="POST" action="profile.php" enctype="multipart/form-data">
+            <form method="POST" action="<?= $baseUrl ?>/public/index.php?page=profile-admin" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="inputAvatar">Foto Profil</label>
@@ -423,12 +232,12 @@ $avatar     = $user['avatar'] ?? '';
         </div>
     </div>
 
-    <form id="deleteAvatarForm" method="POST" action="profile.php" style="display: none;">
+    <form id="deleteAvatarForm" method="POST" action="<?= $baseUrl ?>/public/index.php?page=profile-admin" style="display: none;">
         <input type="hidden" name="delete_avatar" value="1">
     </form>
 
-    <script src="../sidebarAdmin/script.js"></script>
-    <script src="script.js"></script>
+    <script src="<?= $baseUrl ?>/public/js/sidebarAdmin.js"></script>
+    <script src="<?= $baseUrl ?>/public/js/profilAdmin.js"></script>
 </body>
 
 </html>

@@ -4,6 +4,8 @@ $projectRoot = dirname(__DIR__);
 require_once $projectRoot . '/koneksi.php';
 require_once $projectRoot . '/app/Controllers/AuthController.php';
 require_once $projectRoot . '/app/Controllers/ExploreProgramController.php';
+require_once $projectRoot . '/app/Controllers/ScheduleManagementController.php';
+require_once $projectRoot . '/app/Controllers/AdminProfileController.php';
 
 $baseUrl = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/\\');
 $page = $_GET['page'] ?? 'login';
@@ -17,6 +19,12 @@ switch ($page) {
         break;
     case 'explore-program':
         (new ExploreProgramController())->index();
+        break;
+    case 'schedule':
+        (new ScheduleManagementController($baseUrl))->index();
+        break;
+    case 'profile-admin':
+        (new AdminProfileController($pdo, $baseUrl))->index();
         break;
     default:
         http_response_code(404);

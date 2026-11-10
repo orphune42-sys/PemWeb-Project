@@ -69,7 +69,7 @@ function e($value)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Program Management - FindYourPath</title>
-    <link rel="stylesheet" href="../sidebarAdmin/style.css">
+    <link rel="stylesheet" href="../sidebarAdmin/sidebarAdmin.css">
     <link rel="stylesheet" href="program.css">
 </head>
 
@@ -78,7 +78,7 @@ function e($value)
     <?php 
     $activeMenu = 'program';
     $basePath = '../';
-    include "../sidebarAdmin/sidebar.php"; ?>
+    include "../sidebarAdmin/sidebarAdmin.php"; ?>
 
     <main class="program-main">
 

@@ -77,12 +77,12 @@ $monthlyTrends = [
     <title>Dashboard Admin - FindYourPath</title>
 
     <link rel="stylesheet" href="../dashboard-admin/style.css">
-    <link rel="stylesheet" href="../sidebarAdmin/style.css">
+    <link rel="stylesheet" href="../sidebarAdmin/sidebarAdmin.css">
 </head>
 
 <body>
 
-    <?php include '../sidebarAdmin/sidebar.php'; ?>
+    <?php include '../sidebarAdmin/sidebarAdmin.php'; ?>
 
     <div class="main-wrapper">
 
@@ -299,7 +299,7 @@ $monthlyTrends = [
         const monthlyTrendData = <?= json_encode($monthlyTrends); ?>;
     </script>
     <script src="script.js?v=2"></script>
-    <script src="../sidebarAdmin/script.js"></script>
+    <script src="../sidebarAdmin/sidebarAdmin.js"></script>
 </body>
 
 </html>

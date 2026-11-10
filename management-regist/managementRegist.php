@@ -38,12 +38,12 @@ $registrations = array_slice($allRegistrations, $offset, $limit);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Management - FindYourPath</title>
     <link rel="stylesheet" href="../management-regist/style.css">
-    <link rel="stylesheet" href="../sidebarAdmin/style.css">
+    <link rel="stylesheet" href="../sidebarAdmin/sidebarAdmin.css">
 </head>
 
 <body>
 
-    <?php include '../sidebarAdmin/sidebar.php'; ?>
+    <?php include '../sidebarAdmin/sidebarAdmin.php'; ?>
 
     <div class="main-wrapper">
         <header class="header">
@@ -207,7 +207,7 @@ $registrations = array_slice($allRegistrations, $offset, $limit);
 
 <script src="script.js?v=1"></script>
 
-<script src="../sidebarAdmin/script.js"></script>
+<script src="../sidebarAdmin/sidebarAdmin.js"></script>
 
 </body>
 

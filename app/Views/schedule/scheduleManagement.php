@@ -1,130 +1,4 @@
-<?php
-$dataFile = __DIR__ . '/../data/schedules.json';
-$schedules = file_exists($dataFile) ? json_decode(file_get_contents($dataFile), true) : [];
-if (!is_array($schedules)) {
-    $schedules = [];
-}
 
-$message = '';
-$messageType = 'success';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_POST['action'] ?? '';
-
-    if ($action === 'create') {
-        $title = trim($_POST['title'] ?? '');
-        $category = trim($_POST['category'] ?? 'Lomba');
-        $status = trim($_POST['status'] ?? 'Aktif');
-        $startDate = trim($_POST['start_date'] ?? '');
-        $endDate = trim($_POST['end_date'] ?? '');
-        $eventDate = trim($_POST['event_date'] ?? '');
-        if (empty($eventDate)) {
-            $eventDate = !empty($startDate) ? $startDate : date('Y-m-d');
-        }
-        $location = trim($_POST['location'] ?? '');
-        $description = trim($_POST['description'] ?? '');
-
-        if (!empty($title)) {
-            $newSchedule = [
-                'id' => 'sch_' . bin2hex(random_bytes(5)),
-                'title' => $title,
-                'category' => $category,
-                'status' => $status,
-                'start_date' => $startDate,
-                'end_date' => $endDate,
-                'event_date' => $eventDate,
-                'location' => $location,
-                'description' => $description
-            ];
-            $schedules[] = $newSchedule;
-            file_put_contents($dataFile, json_encode($schedules, JSON_PRETTY_PRINT));
-            $message = 'Program baru berhasil ditambahkan!';
-            $messageType = 'success';
-        } else {
-            $message = 'Judul program wajib diisi!';
-            $messageType = 'error';
-        }
-    } elseif ($action === 'update') {
-        $id = trim($_POST['id'] ?? '');
-        $title = trim($_POST['title'] ?? '');
-        $category = trim($_POST['category'] ?? 'Lomba');
-        $status = trim($_POST['status'] ?? 'Aktif');
-        $startDate = trim($_POST['start_date'] ?? '');
-        $endDate = trim($_POST['end_date'] ?? '');
-        $eventDate = trim($_POST['event_date'] ?? '');
-        if (empty($eventDate)) {
-            $eventDate = !empty($startDate) ? $startDate : date('Y-m-d');
-        }
-        $location = trim($_POST['location'] ?? '');
-        $description = trim($_POST['description'] ?? '');
-
-        $found = false;
-        foreach ($schedules as &$sch) {
-            if (($sch['id'] ?? '') === $id) {
-                $sch['title'] = $title;
-                $sch['category'] = $category;
-                $sch['status'] = $status;
-                $sch['start_date'] = $startDate;
-                $sch['end_date'] = $endDate;
-                $sch['event_date'] = $eventDate;
-                $sch['location'] = $location;
-                $sch['description'] = $description;
-                $found = true;
-                break;
-            }
-        }
-        unset($sch);
-
-        if ($found) {
-            file_put_contents($dataFile, json_encode($schedules, JSON_PRETTY_PRINT));
-            $message = 'Program berhasil diperbarui!';
-            $messageType = 'success';
-        } else {
-            $message = 'Data program tidak ditemukan!';
-            $messageType = 'error';
-        }
-    } elseif ($action === 'delete') {
-        $id = trim($_POST['id'] ?? '');
-        $initialCount = count($schedules);
-        $schedules = array_values(array_filter($schedules, function ($sch) use ($id) {
-            return ($sch['id'] ?? '') !== $id;
-        }));
-
-        if (count($schedules) < $initialCount) {
-            file_put_contents($dataFile, json_encode($schedules, JSON_PRETTY_PRINT));
-            $message = 'Program berhasil dihapus!';
-            $messageType = 'success';
-        } else {
-            $message = 'Gagal menghapus program, data tidak ditemukan!';
-            $messageType = 'error';
-        }
-    }
-}
-
-function formatTanggalIndo($dateStr) {
-    if (empty($dateStr)) return '-';
-    $timestamp = strtotime($dateStr);
-    if (!$timestamp) return $dateStr;
-    $bulanIndo = [
-        1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'Mei', 6 => 'Jun',
-        7 => 'Jul', 8 => 'Agu', 9 => 'Sep', 10 => 'Okt', 11 => 'Nov', 12 => 'Des'
-    ];
-    $d = date('j', $timestamp);
-    $m = $bulanIndo[(int)date('n', $timestamp)] ?? date('M', $timestamp);
-    $y = date('Y', $timestamp);
-    return "$d $m $y";
-}
-
-function formatPeriodeIndo($start, $end) {
-    if (empty($start) && empty($end)) return '-';
-    if (!empty($start) && !empty($end)) {
-        return formatTanggalIndo($start) . ' - ' . formatTanggalIndo($end);
-    }
-    return formatTanggalIndo($start ?: $end);
-}
-
-$totalPrograms = count($schedules);
-?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -134,15 +8,15 @@ $totalPrograms = count($schedules);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../sidebarAdmin/style.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="<?= $baseUrl ?>/public/css/sidebarAdmin.css">
+    <link rel="stylesheet" href="<?= $baseUrl ?>/public/css/scheduleManagement.css">
+    
 </head>
 <body>
     <div class="layout-wrapper">
         <?php 
-            $activeMenu = 'schedule'; 
-            $basePath = '../';
-            include __DIR__ . '/../sidebarAdmin/sidebar.php'; 
+        require_once __DIR__ . '/../../Controllers/SidebarAdminController.php'; 
+        (new SidebarAdminController())->render('schedule', $baseUrl);
         ?>
 
         <div class="main-wrapper">
@@ -284,7 +158,7 @@ $totalPrograms = count($schedules);
                                             </span>
                                         </td>
                                         <td class="td-periode">
-                                            <?= htmlspecialchars(formatPeriodeIndo($item['start_date'] ?? '', $item['end_date'] ?? '')) ?>
+                                            <?= htmlspecialchars($scheduleModel->formatPeriodeIndo($item['start_date'] ?? '', $item['end_date'] ?? '')) ?>
                                         </td>
                                         <td class="td-lokasi">
                                             <span class="location-text"><?= htmlspecialchars($item['location'] ?? '') ?></span>
@@ -370,7 +244,7 @@ $totalPrograms = count($schedules);
                 <h3 class="modal-title" id="modalTitle">Tambah Program</h3>
                 <button type="button" class="modal-close-btn" id="btnCloseModal">&times;</button>
             </div>
-            <form method="POST" action="schedule.php" id="programForm">
+            <form method="POST" action="<?= $baseUrl ?>/public/index.php?page=schedule" id="programForm">
                 <input type="hidden" name="action" id="formAction" value="create">
                 <input type="hidden" name="id" id="formId" value="">
 
@@ -435,7 +309,7 @@ $totalPrograms = count($schedules);
         </div>
     </div>
 
-    <form id="deleteForm" method="POST" action="schedule.php" style="display: none;">
+    <form id="deleteForm" method="POST" action="<?= $baseUrl ?>/public/index.php?page=schedule" style="display: none;">
         <input type="hidden" name="action" value="delete">
         <input type="hidden" name="id" id="deleteId" value="">
     </form>
@@ -443,7 +317,7 @@ $totalPrograms = count($schedules);
     <script>
         const initialSchedules = <?= json_encode($schedules, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
     </script>
-    <script src="../sidebarAdmin/script.js"></script>
-    <script src="script.js"></script>
+    <script src="<?= $baseUrl ?>/public/js/sidebarAdmin.js"></script>
+    <script src="<?= $baseUrl ?>/public/js/scheduleManagement.js"></script>
 </body>
 </html>
