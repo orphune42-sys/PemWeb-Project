@@ -1,0 +1,56 @@
+[
+    {
+        "id": 1,
+        "name": "Beasiswa Unggulan",
+        "organizer": "Kemendikbudristek",
+        "type": "Beasiswa",
+        "field": "Pendidikan",
+        "deadline": "2026-12-20",
+        "registrants": 120
+    },
+    {
+        "id": 2,
+        "name": "Gemastik",
+        "organizer": "Universitas",
+        "type": "Lomba",
+        "field": "Teknologi",
+        "deadline": "2026-11-25",
+        "registrants": 85
+    },
+    {
+        "id": 3,
+        "name": "Program Magang Bersertifikat",
+        "organizer": "Mitra Industri",
+        "type": "Magang",
+        "field": "Karier",
+        "deadline": "2026-12-15",
+        "registrants": 64
+    },
+    {
+        "id": 4,
+        "name": "Lomba Karya Tulis Ilmiah",
+        "organizer": "Universitas",
+        "type": "Lomba",
+        "field": "Penelitian",
+        "deadline": "2026-11-30",
+        "registrants": 45
+    },
+    {
+        "id": 5,
+        "name": "Beasiswa Pendidikan",
+        "organizer": "Lembaga Pendidikan",
+        "type": "Beasiswa",
+        "field": "Pendidikan",
+        "deadline": "2026-10-15",
+        "registrants": 90
+    },
+    {
+        "id": 6,
+        "name": "Program Pengembangan Mahasiswa",
+        "organizer": "Organisasi Mahasiswa",
+        "type": "Program",
+        "field": "Pengembangan Diri",
+        "deadline": "2026-12-30",
+        "registrants": 30
+    }
+]
