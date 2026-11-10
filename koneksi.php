@@ -3,8 +3,8 @@
 $host = 'localhost';
 $port = '3306';
 $db = 'findyourpath';
-$user = 'root';
-$password = '';
+$user = 'rindra';
+$password = '345678';
 $dbCharset = 'utf8mb4';
 
 

@@ -1,19 +1,16 @@
 <?php
 require_once __DIR__ . '/../Models/AdminProfile.php';
 
-class AdminProfileController
-{
+class AdminProfileController {
     private AdminProfile $profileModel;
     private string $baseUrl;
 
-    public function __construct(PDO $pdo, string $baseUrl)
-    {
+    public function __construct(PDO $pdo, string $baseUrl) {
         $this->profileModel = new AdminProfile($pdo);
         $this->baseUrl = $baseUrl;
     }
 
-    public function index(): void
-    {
+    public function index(): void {
         if (!isset($_SESSION['user']) || ($_SESSION['user']['role'] ?? '') !== 'admin') {
             header('Location: ' . $this->baseUrl . '/public/index.php?page=login');
             exit;
@@ -48,7 +45,6 @@ class AdminProfileController
                 header('Location: ' . $this->baseUrl . '/public/index.php?page=login&status=deleted');
                 exit;
             } else {
-                // Update profile
                 $newAvatarPath = $oldAvatar;
                 $uploadError = '';
 
@@ -91,8 +87,6 @@ class AdminProfileController
                     }
                 }
             }
-
-            // Re-fetch data terbaru
             $user = $this->profileModel->getProfile($userId);
         }
 
