@@ -1,8 +1,16 @@
 <?php
-function e($value)
-{
-    return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+
+if (!function_exists('e')) {
+    function e($value)
+    {
+        return htmlspecialchars(
+            (string) $value,
+            ENT_QUOTES,
+            'UTF-8'
+        );
+    }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -12,18 +20,21 @@ function e($value)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Dashboard Admin</title>
+    <title>Dashboard Admin - FindYourPath</title>
 
-    <link rel="stylesheet"
-        href="../../dashboard-admin/style.css">
+    <link rel="stylesheet" href="../../dashboard-admin/style.css">
+    <link rel="stylesheet" href="../../sidebarAdmin/sidebarAdmin.css">
 </head>
 
 <body>
 
+    <?php
+    require_once __DIR__ . '/../../../sidebarAdmin/sidebarAdmin.php';
+    ?>
+
     <div class="dashboard-container">
 
         <h1>Dashboard Admin</h1>
-
 
         <div class="dashboard-cards">
 
@@ -48,52 +59,55 @@ function e($value)
             </div>
 
         </div>
+
     </div>
 
-    <h2>Data User</h2>
+    <div class="dashboard-container">
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nama</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Role</th>
-            </tr>
-        </thead>
+        <h2>Data User</h2>
 
-        <tbody>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nama</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
 
-            <?php if (!empty($dataUser)): ?>
+            <tbody>
 
-                <?php foreach ($dataUser as $user): ?>
+                <?php if (!empty($dataUser)): ?>
+
+                    <?php foreach ($dataUser as $user): ?>
+
+                        <tr>
+                            <td><?= e($user['id']) ?></td>
+                            <td><?= e($user['name']) ?></td>
+                            <td><?= e($user['username']) ?></td>
+                            <td><?= e($user['email']) ?></td>
+                            <td><?= e($user['role']) ?></td>
+                        </tr>
+
+                    <?php endforeach; ?>
+
+                <?php else: ?>
 
                     <tr>
-                        <td><?= e($user['id']) ?></td>
-                        <td><?= e($user['name']) ?></td>
-                        <td><?= e($user['username']) ?></td>
-                        <td><?= e($user['email']) ?></td>
-                        <td><?= e($user['role']) ?></td>
+                        <td colspan="5">Belum ada data user.</td>
                     </tr>
 
-                <?php endforeach; ?>
+                <?php endif; ?>
 
-            <?php else: ?>
-
-                <tr>
-                    <td colspan="5">Belum ada data user.</td>
-                </tr>
-
-            <?php endif; ?>
-
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 
     </div>
 
-    <script src="../../management-regist/script.js?v=1"></script>
-    <script src="../../sidebarAdmin/script.js"></script>
+    <script src="../../dashboard-admin/script.js?v=1"></script>
+    <script src="../../sidebarAdmin/sidebarAdmin.js"></script>
 
 </body>
 
