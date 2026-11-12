@@ -180,37 +180,6 @@ a {
     color: #F0F5FA;
     font-size: 15px;
 }
-
-.bookmark-form {
-    position: absolute;
-    z-index: 2;
-    right: 24px;
-    top: 24px;
-}
-
-.bookmark-button {
-    width: 46px;
-    height: 46px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.94);
-    color: #52647D;
-    font-size: 27px;
-    cursor: pointer;
-    display: grid;
-    place-items: center;
-    box-shadow: 0 3px 12px rgba(25, 49, 71, 0.08);
-    transition: transform 0.2s, color 0.2s;
-}
-
-.bookmark-button:hover {
-    transform: scale(1.06);
-}
-
-.bookmark-button.is-saved {
-    color: #E34E71;
-}
-
 /* QUICK INFORMATION */
 
 .quick-info {
