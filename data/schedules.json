@@ -174,5 +174,16 @@
         "event_date": "2026-10-30",
         "location": "UGM",
         "description": "Puncak acara kompetisi nasional dan pameran inovasi karya mahasiswa."
+    },
+    {
+        "id": "sch_17f0f9ccd8",
+        "title": "Brawijaya Business Plan Competition",
+        "category": "Lomba",
+        "status": "Akan Datang",
+        "start_date": "2027-01-16",
+        "end_date": "2027-02-16",
+        "event_date": "2027-01-16",
+        "location": "Brawijaya",
+        "description": "Kompetisi perencanaan bisnis bagi generasi muda atau mahasiswa untuk merancang ide usaha dari nol, lengkap dengan analisis pasar, strategi pemasaran, dan proyeksi keuangan."
     }
 ]

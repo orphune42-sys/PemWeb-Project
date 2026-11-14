@@ -1,68 +1,84 @@
 <?php
+
+require_once __DIR__ . '/../../koneksi.php';
+
 class Schedule {
-    private string $dataFile;
+    private PDO $pdo;
 
     public function __construct() {
-        $this->dataFile = dirname(__DIR__, 2) . '/data/schedules.json';
+       global $pdo;
+       $this->pdo = $pdo;
     }
 
     public function getAll(): array {
-        if (!file_exists($this->dataFile)) {
-            return [];
-        }
-        $data = json_decode(file_get_contents($this->dataFile), true);
-        return is_array($data) ? $data : [];
-    }
+    $query = "SELECT
+                id,
+                nama_program AS title,
+                jenis_kategori AS category,
+                status,
+                tanggal_mulai_pendaftaran AS start_date,
+                tanggal_selesai_pendaftaran AS end_date,
+                tanggal_pelaksanaan AS event_date,
+                lokasi AS location,
+                deskripsi AS description
+              FROM schedule_management
+              ORDER BY id DESC";
+
+    $stmt = $this->pdo->query($query);
+    return $stmt->fetchAll();
+}
 
     public function create(array $data): bool {
-        $schedules = $this->getAll();
-        $newSchedule = [
-            'id'          => 'sch_' . bin2hex(random_bytes(5)),
-            'title'       => trim($data['title'] ?? ''),
-            'category'    => trim($data['category'] ?? 'Lomba'),
-            'status'      => trim($data['status'] ?? 'Aktif'),
-            'start_date'  => trim($data['start_date'] ?? ''),
-            'end_date'    => trim($data['end_date'] ?? ''),
-            'event_date'  => !empty($data['event_date']) ? trim($data['event_date']) : (trim($data['start_date'] ?? '') ?: date('Y-m-d')),
-            'location'    => trim($data['location'] ?? ''),
-            'description' => trim($data['description'] ?? '')
-        ];
-        $schedules[] = $newSchedule;
-        return (bool) file_put_contents($this->dataFile, json_encode($schedules, JSON_PRETTY_PRINT));
-    }
+    $query = "INSERT INTO schedule_management (
+    nama_program, jenis_kategori, status, tanggal_mulai_pendaftaran, tanggal_selesai_pendaftaran, tanggal_pelaksanaan, lokasi, deskripsi) VALUES (
+    :title, :category, :status, :start_date, :end_date, :event_date, :location, :description )";
+
+    $stmt = $this->pdo->prepare($query);
+
+    return $stmt->execute([
+        ':title'=>trim($data['title'] ?? ''),
+        ':category'=>trim($data['category'] ?? 'Lomba'),
+        ':status'=>trim($data['status'] ?? 'Aktif'),
+        ':start_date'=>trim($data['start_date'] ?? ''),
+        ':end_date'=>trim($data['end_date'] ?? ''),
+        ':event_date'=>!empty($data['event_date']) ? trim($data['event_date']) : (trim($data['start_date'] ?? '') ?: date('Y-m-d')),
+        ':location'=>trim($data['location'] ?? ''),
+        ':description'=>trim($data['description'] ?? '')
+    ]);
+}
 
     public function update(string $id, array $data): bool {
-        $schedules = $this->getAll();
-        $found = false;
-        foreach ($schedules as &$sch) {
-            if (($sch['id'] ?? '') === $id) {
-                $sch['title']       = trim($data['title'] ?? '');
-                $sch['category']    = trim($data['category'] ?? 'Lomba');
-                $sch['status']      = trim($data['status'] ?? 'Aktif');
-                $sch['start_date']  = trim($data['start_date'] ?? '');
-                $sch['end_date']    = trim($data['end_date'] ?? '');
-                $sch['event_date']  = !empty($data['event_date']) ? trim($data['event_date']) : (trim($data['start_date'] ?? '') ?: date('Y-m-d'));
-                $sch['location']    = trim($data['location'] ?? '');
-                $sch['description'] = trim($data['description'] ?? '');
-                $found = true;
-                break;
-            }
+    $query = "UPDATE schedule_management set
+                nama_program = :title,
+                jenis_kategori = :category,
+                status = :status,
+                tanggal_mulai_pendaftaran = :start_date,
+                tanggal_selesai_pendaftaran = :end_date,
+                tanggal_pelaksanaan = :event_date,
+                lokasi = :location,
+                deskripsi = :description
+                where id = :id";
+
+        $stmt = $this->pdo->prepare($query);
+
+        return $stmt->execute ([
+            ':id' => $id,
+            ':title'=>trim($data['title'] ?? ''),
+            ':category'=>trim($data['category'] ?? 'Lomba'),
+            ':status'=>trim($data['status'] ?? 'Aktif'),
+            ':start_date'=>trim($data['start_date'] ?? ''),
+            ':end_date'=>trim($data['end_date'] ?? ''),
+            ':event_date'=>!empty($data['event_date']) ? trim($data['event_date']) : (trim($data['start_date'] ?? '') ?: date('Y-m-d')),
+            ':location'=>trim($data['location'] ?? ''),
+            ':description'=>trim($data['description'] ?? '')
+        ]);
         }
-        unset($sch);
-        if ($found) {
-            return (bool) file_put_contents($this->dataFile, json_encode($schedules, JSON_PRETTY_PRINT));
-        }
-        return false;
-    }
 
     public function delete(string $id): bool {
-        $schedules = $this->getAll();
-        $initialCount = count($schedules);
-        $schedules = array_values(array_filter($schedules, fn($sch) => ($sch['id'] ?? '') !== $id));
-        if (count($schedules) < $initialCount) {
-            return (bool) file_put_contents($this->dataFile, json_encode($schedules, JSON_PRETTY_PRINT));
-        }
-        return false;
+        $query = "DELETE FROM schedule_management where id = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute([':id' => $id]);
+        return $stmt->rowCount() > 0;
     }
 
     public function formatTanggalIndo(?string $dateStr): string {
