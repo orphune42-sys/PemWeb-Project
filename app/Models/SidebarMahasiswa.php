@@ -3,26 +3,28 @@ class SidebarMahasiswa
 {
     public function getMenuItems(string $baseUrl): array
     {
+        $indexUrl = $baseUrl . '/public';
+
         return [
             [
                 'key' => 'dashboard',
                 'title' => 'Dashboard',
-                'url' => $baseUrl . '/dashboard-user/user.php'
+                'url' => $indexUrl . '?page=dashboard-user'
             ],
             [
                 'key' => 'explore-program',
                 'title' => 'Explore Program',
-                'url' => $baseUrl . '/public/index.php?page=explore-program'
+                'url' => $indexUrl . '?page=explore-program'
             ],
             [
-                'key' => 'fine-opportunities',
+                'key' => 'find-opportunities',
                 'title' => 'Find Opportunities',
-                'url' => $baseUrl . '/pendaftaran_program/form_pendaftaran.php'
+                'url' => $indexUrl . '?page=opportunity'
             ],
             [
                 'key' => 'profile',
                 'title' => 'Profile',
-                'url' => $baseUrl . '/profile_user/profile_user.php'
+                'url' => $indexUrl . '?page=profile-user'
             ],
         ];
     }

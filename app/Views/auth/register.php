@@ -42,7 +42,7 @@ $baseUrl = $baseUrl ?? '';
                 <span class="toast-text" id="toastText"><?= htmlspecialchars($serverMessage) ?></span>
             </div>
 
-            <form id="registerForm" data-login-url="<?= $baseUrl ?>/index.php?page=login" method="POST" action="<?= $baseUrl ?>/index.php?page=register" novalidate>
+            <form id="registerForm" data-login-url="<?= $baseUrl ?>/public/index.php?page=login" method="POST" action="<?= $baseUrl ?>/public/index.php?page=register" novalidate>
                 <div class="form-group">
                     <input
                         type="text"
@@ -107,7 +107,7 @@ $baseUrl = $baseUrl ?? '';
             </form>
 
             <div class="auth-footer">
-                <small>Sudah punya akun? <a href="<?= $baseUrl ?>/index.php?page=login">Login</a></small>
+                <small>Sudah punya akun? <a href="<?= $baseUrl ?>/public/index.php?page=login">Login</a></small>
             </div>
         </div>
     </div>

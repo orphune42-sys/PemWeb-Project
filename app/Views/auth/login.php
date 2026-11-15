@@ -41,7 +41,7 @@ $baseUrl = $baseUrl ?? '';
             <div id="alertToast" class="alert-toast <?= !empty($serverMessage) ? ($serverSuccess ? 'show success' : 'show error') : '' ?>">
                 <span class="toast-text" id="toastText"><?= htmlspecialchars($serverMessage) ?></span>
             </div>
-            <form id="loginForm" method="POST" action="<?= $baseUrl ?>/index.php?page=login" novalidate>
+            <form id="loginForm" method="POST" action="<?= $baseUrl ?>/public/index.php?page=login" novalidate>
                 <div class="form-group">
                     <input
                         type="text"
@@ -84,7 +84,7 @@ $baseUrl = $baseUrl ?? '';
             </form>
 
             <div class="auth-footer">
-                <small>Belum punya akun? <a href="<?= $baseUrl ?>/index.php?page=register">Register</a></small>
+                <small>Belum punya akun? <a href="<?= $baseUrl ?>/public/index.php?page=register">Register</a></small>
             </div>
         </div>
     </div>

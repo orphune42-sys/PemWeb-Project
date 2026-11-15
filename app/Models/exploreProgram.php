@@ -1,5 +1,5 @@
 <?php
-class exploreProgram
+class ExploreProgram
 {
     public function getAll(): array
     {

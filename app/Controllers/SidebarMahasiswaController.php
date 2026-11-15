@@ -14,8 +14,9 @@ class SidebarMahasiswaController
     {
         $menuItems = $this->sidebarModel->getMenuItems($baseUrl);
         $logoUrl = $baseUrl . '/public/images/LOGO.png';
-        $logoutUrl = $baseUrl . '/logout.php';
+        $logoutUrl = $baseUrl . '/public/?page=logout';
 
         require __DIR__ . '/../Views/layouts/sidebarMahasiswa.php';
     }
 }
+ 

@@ -55,13 +55,13 @@ class AuthController
             if ($user) {
                 $role = strtolower($user['role'] ?? 'mahasiswa');
                 session_regenerate_id(true);
-                $_SESSION['user'] = ['id'=>$user['id'], 'name'=>$user['name'], 'email'=>$user['email'], 'role'=>$role];
-                $target = $role === 'admin' ? $this->baseUrl . '/dashboard-admin/dashboardAdmin.php' : $this->baseUrl . '/dashboard-user/user.php';
-                if ($isJson) $this->respond(true, ['success'=>true, 'message'=>'Login berhasil! Selamat datang, ' . htmlspecialchars($user['name']), 'redirect'=>$target]);
+                $_SESSION['user'] = ['id' => $user['id'], 'name' => $user['name'], 'email' => $user['email'], 'role' => $role];
+                $target = $role === 'admin' ? $this->baseUrl . '/public/?page=dashboard-admin' : $this->baseUrl . '/public/?page=dashboard-user';
+                if ($isJson) $this->respond(true, ['success' => true, 'message' => 'Login berhasil! Selamat datang, ' . htmlspecialchars($user['name']), 'redirect' => $target]);
                 $this->respond(false, [], $target);
             }
             $message = $dbError ? 'Terjadi kesalahan pada server. Silakan coba lagi nanti.' : (($email === '' || $password === '') ? 'Email dan password tidak boleh kosong!' : 'Email atau password yang Anda masukkan salah!');
-            if ($isJson) $this->respond(true, ['success'=>false, 'message'=>$message]);
+            if ($isJson) $this->respond(true, ['success' => false, 'message' => $message]);
         }
         $serverMessage = $message;
         $baseUrl = $this->baseUrl;
@@ -107,7 +107,7 @@ class AuthController
                     $message = 'Terjadi kesalahan pada server. Silakan coba lagi nanti.';
                 }
             }
-            if ($isJson) $this->respond(true, ['success'=>$success, 'message'=>$message]);
+            if ($isJson) $this->respond(true, ['success' => $success, 'message' => $message]);
         }
         $serverMessage = $message;
         $serverSuccess = $success;
@@ -119,6 +119,31 @@ class AuthController
     {
         $target = strtolower($role) === 'admin' ? $this->baseUrl . '/dashboard-admin/dashboardAdmin.php' : $this->baseUrl . '/dashboard-user/user.php';
         header('Location: ' . $target);
+        exit;
+    }
+
+    public function logout(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $_SESSION = [];
+
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(
+                session_name(),
+                '',
+                time() - 42000,
+                $params["path"],
+                $params["domain"],
+                $params["secure"],
+                $params["httponly"]
+            );
+        }
+        session_destroy();
+        header('Location: ' . $this->baseUrl . '/public/?page=login');
         exit;
     }
 }

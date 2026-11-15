@@ -42,9 +42,14 @@
                         </svg>
                     </button>
                     <div class="header-user">
-                        <div class="header-avatar">N</div>
+                        <div class="header-avatar">
+                            <?= strtoupper(substr($_SESSION['user']['name'] ?? 'M', 0, 1)) ?>
+                        </div>
+
                         <div class="header-userinfo">
-                            <span class="header-username">Naura</span>
+                            <span class="header-username">
+                                <?= htmlspecialchars($_SESSION['user']['name'] ?? 'Mahasiswa') ?>
+                            </span>
                             <span class="header-userrole">Mahasiswa</span>
                         </div>
                     </div>
