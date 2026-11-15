@@ -31,7 +31,6 @@ $menuItems = [
         <a href="<?= htmlspecialchars($basePath) ?>profile/profile.php" class="sidebar-brand">
             <img src="<?= htmlspecialchars($basePath) ?>assets/LOGO.png" alt="FindYourPath Logo" class="brand-logo">
         </a>
-        
     </div>
 
     <nav class="sidebar-nav">

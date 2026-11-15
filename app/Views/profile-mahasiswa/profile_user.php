@@ -1,123 +1,12 @@
 <?php
-session_start();
-$user = $_SESSION["user"] ?? [
-    "nama" => "",
-    "email" => ""
-];
-
-$defaultProfile = [
-    "nama"        => $user["nama"] ?? "",
-    "nim"         => "",
-    "email"       => $user["email"] ?? "",
-    "telepon"     => "",
-    "gender"      => "",
-    "lahir"       => "",
-    "domisili"    => "",
-    "universitas" => "",
-    "fakultas"    => "",
-    "prodi"       => "",
-    "angkatan"    => "",
-    "semester"    => "",
-    "ipk"         => "",
-    "skills"      => []
-];
-
-if (!isset($_SESSION["profile"])) {
-    $_SESSION["profile"] = $defaultProfile;
-}
-
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $action = $_POST["action"] ?? "";
-
-    if ($action === "update_profile") {
-        $_SESSION["profile"]["nama"] =
-            $_POST["nama"] ?? "";
-        $_SESSION["profile"]["email"] =
-            $_SESSION["user"]["email"] ?? "";
-        $_SESSION["profile"]["telepon"] =
-            $_POST["telepon"] ?? "";
-        $_SESSION["profile"]["domisili"] =
-            $_POST["domisili"] ?? "";
-        $_SESSION["profile"]["prodi"] =
-            $_POST["prodi"] ?? "";
-        $_SESSION["profile"]["semester"] =
-            $_POST["semester"] ?? "";
-        $_SESSION["profile"]["ipk"] =
-            $_POST["ipk"] ?? "";
-        $_SESSION["message"] =
-            "Profil berhasil diperbarui.";
-        header("Location: profile_user.php");
-        exit;
-    }
-
-    if ($_SERVER["REQUEST_METHOD"] === "POST" && ($_POST["action"] ?? "") === "update_academic") {
-        $_SESSION["profile"]["universitas"] = $_POST["universitas"] ?? "";
-        $_SESSION["profile"]["fakultas"] = $_POST["fakultas"] ?? "";
-        $_SESSION["profile"]["prodi"] = $_POST["prodi"] ?? "";
-        $_SESSION["profile"]["angkatan"] = $_POST["angkatan"] ?? "";
-        $_SESSION["profile"]["semester"] = $_POST["semester"] ?? "";
-        $_SESSION["profile"]["ipk"] = $_POST["ipk"] ?? "";
-        header("Location: profile_user.php?success=academic");
-        exit;
-    }
-
-    if ($action === "add_skill") {
-        $skill = trim($_POST["skill"] ?? "");
-        if ($skill !== "") {
-            $_SESSION["profile"]["skills"][] = $skill;
-            $_SESSION["message"] =
-                "Keahlian berhasil ditambahkan.";
-        }
-        header("Location: profile_user.php");
-        exit;
-    }
-
-    if ($action === "edit_skill") {
-        $index = isset($_POST["skill_index"])
-            ? (int) $_POST["skill_index"]
-            : -1;
-        $skill = trim($_POST["skill"] ?? "");
-        if ($index >= 0 && isset($_SESSION["profile"]["skills"][$index]) && $skill !== "") {
-            $_SESSION["profile"]["skills"][$index] =
-                $skill;
-            $_SESSION["message"] =
-                "Keahlian berhasil diperbarui.";
-        }
-        header("Location: profile_user.php");
-        exit;
-    }
-
-    if ($action === "delete_skill") {
-        $index = isset($_POST["skill_index"]) ? (int) $_POST["skill_index"] : -1;
-        if ($index >= 0 && isset($_SESSION["profile"]["skills"][$index])) {
-            unset($_SESSION["profile"]["skills"][$index]);
-            $_SESSION["profile"]["skills"] = array_values($_SESSION["profile"]["skills"]);
-            $_SESSION["message"] = "Keahlian berhasil dihapus.";
-        }
-        header("Location: profile_user.php");
-        exit;
-    }
-}
-
-if (isset($_GET["action"]) && $_GET["action"] === "reset") {
-    unset($_SESSION["profile"]);
-    header("Location: profile_user.php");
-    exit;
-}
-
-$profile = $_SESSION["profile"];
-$message = $_SESSION["message"] ?? "";
-unset($_SESSION["message"]);
-
 $editSkillIndex = isset($_GET["edit_skill"]) ? (int) $_GET["edit_skill"] : -1;
+
 $editSkillValue = "";
 
-if ($editSkillIndex >= 0 && isset($profile["skills"][$editSkillIndex])) {
+if ( $editSkillIndex >= 0 && isset($profile["skills"][$editSkillIndex])) {
     $editSkillValue = $profile["skills"][$editSkillIndex];
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="id">
@@ -127,16 +16,16 @@ if ($editSkillIndex >= 0 && isset($profile["skills"][$editSkillIndex])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Profile - FindYourPath </title>
 
-    <link rel="stylesheet" href="../sidebarMahasiswa/style.css">
-    <link rel="stylesheet" href="profile_user.css">
+    <link rel="stylesheet" href="<?= $baseUrl ?>/public/css/sidebarMahasiswa.css">
+    <link rel="stylesheet" href="<?= $baseUrl ?>/public/css/profile_user.css">
 </head>
 
 <body>
     <!-- SIDEBAR -->
     <?php
     $activeMenu = 'profile';
-    $basePath = '../';
-    include '../sidebarMahasiswa/sidebar.php';
+    $basePath = $baseUrl . '/';
+    include $projectRoot . '/sidebarMahasiswa/sidebar.php';
     ?>
     <main class="main-content">
         <header class="header">
@@ -189,7 +78,10 @@ if ($editSkillIndex >= 0 && isset($profile["skills"][$editSkillIndex])) {
                     </div>
                 </div>
 
-                <form method="POST" class="profile-form">
+                <form
+                method="POST"
+                action="<?= $baseUrl ?>/public/index.php?page=profile-mahasiswa"
+                class="profile-form">
                     <input
                         type="hidden"
                         name="action"
@@ -212,7 +104,43 @@ if ($editSkillIndex >= 0 && isset($profile["skills"][$editSkillIndex])) {
                             id="email"
                             name="email"
                             value="<?= htmlspecialchars($profile["email"]); ?>"
+                            readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nim">NIM</label>
+                        <input
+                            type="text"
+                            id="nim"
+                            name="nim"
+                            value="<?= htmlspecialchars($profile["nim"]); ?>"
+                            placeholder="Masukkan NIM"
                             required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender">Jenis Kelamin</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Pilih Jenis Kelamin</option>
+                            <option value="Perempuan"
+                                <?= $profile["gender"] === "Perempuan" ? "selected" : ""; ?>>
+                                Perempuan
+                            </option>
+
+                            <option value="Laki-laki"
+                                <?= $profile["gender"] === "Laki-laki" ? "selected" : ""; ?>>
+                                Laki-laki
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lahir">Tanggal Lahir</label>
+                        <input
+                            type="date"
+                            id="lahir"
+                            name="lahir"
+                            value="<?= htmlspecialchars($profile["lahir"]); ?>">
                     </div>
 
                     <div class="form-group">
@@ -231,35 +159,6 @@ if ($editSkillIndex >= 0 && isset($profile["skills"][$editSkillIndex])) {
                             id="domisili"
                             name="domisili"
                             value="<?= htmlspecialchars($profile["domisili"]); ?>">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="prodi">Program Studi</label>
-                        <input
-                            type="text"
-                            id="prodi"
-                            name="prodi"
-                            value="<?= htmlspecialchars($profile["prodi"]); ?>">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="semester">Semester</label>
-                        <input
-                            type="number"
-                            id="semester"
-                            name="semester"
-                            value="<?= htmlspecialchars($profile["semester"]); ?>"
-                            min="1"
-                            max="14">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="ipk">IPK</label>
-                        <input
-                            type="text"
-                            id="ipk"
-                            name="ipk"
-                            value="<?= htmlspecialchars($profile["ipk"]); ?>">
                     </div>
 
                     <div class="form-actions">
@@ -523,8 +422,8 @@ if ($editSkillIndex >= 0 && isset($profile["skills"][$editSkillIndex])) {
         </div>
     </main>
 
-    <script src="../sidebarMahasiswa/script.js"></script>
-    <script src="profile_user.js"></script>
+    <script src="<?= $baseUrl ?>/public/js/sidebarMahasiswa.js"></script>
+    <script src="<?= $baseUrl ?>/public/js/profile_user.js"></script>
     <div id="academicModal" class="modal-overlay hidden">
         <div class="academic-modal">
             <div class="modal-header">
@@ -544,7 +443,7 @@ if ($editSkillIndex >= 0 && isset($profile["skills"][$editSkillIndex])) {
 
             <form
                 method="POST"
-                action="profile_user.php"
+                action="<?= $baseUrl ?>/public/index.php?page=profile-mahasiswa"
                 class="academic-form">
                 <input
                     type="hidden"
@@ -628,7 +527,6 @@ if ($editSkillIndex >= 0 && isset($profile["skills"][$editSkillIndex])) {
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn-secondary" onclick="closeAcademicModal()">Batal</button>
-
                     <button type="submit" class="btn-primary">Simpan Data</button>
                 </div>
             </form>

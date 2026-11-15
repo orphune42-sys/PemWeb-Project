@@ -2,6 +2,42 @@
 session_start();
 require_once __DIR__ . '/../koneksi.php';
 
+// Memastikan pengguna sudah login
+if (!isset($_SESSION['user'])) {
+    header('Location: ../public/index.php?page=login');
+    exit;
+}
+
+// Memastikan hanya mahasiswa yang bisa mendaftar
+if (($_SESSION['user']['role'] ?? '') !== 'mahasiswa') {
+    http_response_code(403);
+    exit('Akses ditolak. Halaman ini hanya untuk mahasiswa.');
+}
+
+// Mengambil identitas pengguna dari session
+$userId = (int) $_SESSION['user']['id'];
+$namaAkun = $_SESSION['user']['name'];
+$emailAkun = $_SESSION['user']['email'];
+
+// Mencari ID mahasiswa berdasarkan ID pengguna
+$stmtMahasiswa = $pdo->prepare(
+    "SELECT id FROM mahasiswa WHERE user_id = :user_id LIMIT 1"
+);
+
+$stmtMahasiswa->execute([
+    'user_id' => $userId
+]);
+
+$mahasiswa = $stmtMahasiswa->fetch(PDO::FETCH_ASSOC);
+
+// Memastikan akun memiliki data mahasiswa
+if (!$mahasiswa) {
+    http_response_code(403);
+    exit('Data mahasiswa tidak ditemukan. Silakan hubungi administrator.');
+}
+
+$mahasiswaId = (int) $mahasiswa['id'];
+
 // Mengambil ID program dari URL
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
@@ -44,8 +80,8 @@ if ($id) {
 
 // Memproses pendaftaran
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $program) {
-    $nama = trim($_POST['nama'] ?? '');
-    $email = trim($_POST['email'] ?? '');
+    $nama = $namaAkun;
+    $email = $emailAkun;
     $telepon = trim($_POST['telepon'] ?? '');
     $universitas = trim($_POST['universitas'] ?? '');
     $prodi = trim($_POST['prodi'] ?? '');
@@ -152,6 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $program) {
                 "INSERT INTO pendaftaran (
                     kode_pendaftaran,
                     program_id,
+                    mahasiswa_id,
                     nama,
                     email,
                     telepon,
@@ -163,6 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $program) {
                 ) VALUES (
                     :kode,
                     :program_id,
+                    :mahasiswa_id,
                     :nama,
                     :email,
                     :telepon,
@@ -177,6 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $program) {
             $stmtInsert->execute([
                 'kode' => $registrationId,
                 'program_id' => $id,
+                'mahasiswa_id' => $mahasiswaId,
                 'nama' => $nama,
                 'email' => $email,
                 'telepon' => $telepon,
@@ -346,15 +385,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $program) {
             <div class="form-group">
                 <label for="nama">Nama Lengkap *</label>
                 <input type="text" id="nama" name="nama"
-                    value="<?= e($_POST['nama'] ?? '') ?>"
+                    value="<?= e($namaAkun) ?>"
                     maxlength="100" required>
             </div>
 
             <div class="form-group">
                 <label for="email">Email Aktif *</label>
                 <input type="email" id="email" name="email"
-                    value="<?= e($_POST['email'] ?? '') ?>"
-                    maxlength="150" required>
+                    value="<?= e($emailAkun) ?>"
+                    maxlength="150" readonly>
             </div>
 
             <div class="form-group">

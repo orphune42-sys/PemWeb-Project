@@ -783,3 +783,113 @@ a {
     width: 100%;
   }
 }
+
+@media (max-width: 900px) {
+    .hamburger-btn {
+        display: block;
+    }
+}
+
+
+/* =================================
+   TYPOGRAPHY - PROFILE MAHASISWA
+   Diselaraskan dengan Explore Program
+================================= */
+
+/* Font utama */
+body {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Judul halaman */
+.header-title {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* Judul dan informasi profil */
+.profile-main-info h2 {
+    font-size: 20px;
+}
+
+.profile-main-info p {
+    font-size: 13px;
+}
+
+/* Judul setiap section */
+.section-header h2 {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.section-header p {
+    font-size: 12px;
+}
+
+/* Label informasi */
+.info-item span {
+    font-size: 12px;
+}
+
+/* Isi informasi */
+.info-item strong {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Tombol */
+.btn-primary,
+.btn-secondary {
+    font-size: 12px;
+}
+
+.btn-outline,
+.btn-small {
+    font-size: 11px;
+}
+
+/* Keahlian dan portofolio */
+.skill-badge,
+.empty-skill {
+    font-size: 12px;
+}
+
+.portfolio-empty h3,
+.tips-card h3 {
+    font-size: 15px;
+}
+
+.portfolio-empty p,
+.tips-card p {
+    font-size: 12px;
+}
+
+.progress-text,
+.danger-card p {
+    font-size: 12px;
+}
+
+/* Form */
+.form-group label {
+    font-size: 12px;
+}
+
+.form-group input,
+.form-group select {
+    font-size: 13px;
+}
+
+/* Hamburger untuk layar kecil */
+@media (max-width: 900px) {
+    .hamburger-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+}

@@ -8,6 +8,7 @@ require_once $projectRoot . '/app/Controllers/ScheduleManagementController.php';
 require_once $projectRoot . '/app/Controllers/AdminProfileController.php';
 require_once $projectRoot . '/app/Controllers/programManagementController.php';
 require_once $projectRoot . '/app/Controllers/OpportunityController.php';
+require_once $projectRoot . '/app/Controllers/MahasiswaProfileController.php';
 
 $baseUrl = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/\\');
 $page = $_GET['page'] ?? 'login';
@@ -45,6 +46,9 @@ switch ($page) {
         break;
     case 'profile-admin':
         (new AdminProfileController($pdo, $baseUrl))->index();
+        break;
+    case 'profile-mahasiswa':
+        (new MahasiswaProfileController($pdo, $baseUrl, $projectRoot))->index();
         break;
     case 'program-management':
         (new programManagementController())->index();
