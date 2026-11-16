@@ -10,6 +10,7 @@ require_once $projectRoot . '/app/Controllers/programManagementController.php';
 require_once $projectRoot . '/app/Controllers/OpportunityController.php';
 require_once $projectRoot . '/app/Controllers/MahasiswaProfileController.php';
 require_once $projectRoot . '/app/Controllers/ManagementRegistController.php';
+require_once $projectRoot . '/app/Controllers/dashboardUserController.php';
 
 $baseUrl = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/\\');
 $page = $_GET['page'] ?? 'login';
@@ -59,6 +60,9 @@ switch ($page) {
         break;
     case 'management-regist':
         (new ManagementRegistController($pdo, $baseUrl))->index();
+        break;
+    case 'dashboard-user':
+        (new dashboardUserController($pdo, $baseUrl))->index();
         break;
     case 'logout':
         (new AuthController($pdo, $baseUrl))->logout();
