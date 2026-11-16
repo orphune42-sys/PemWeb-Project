@@ -22,7 +22,7 @@ class SidebarAdmin
             [
                 'key'   => 'registration',
                 'title' => 'Registration',
-                'url'   => $baseUrl . '/public/index.php?page=management-registration'
+                'url'   => $baseUrl . '/public/index.php?page=management-regist'
             ],
             [
                 'key'   => 'profile',

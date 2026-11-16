@@ -7,6 +7,8 @@
  * @var string $activeMenu
  * @var string $baseUrl
  */
+
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
