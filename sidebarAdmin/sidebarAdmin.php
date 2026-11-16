@@ -10,7 +10,7 @@ $menuItems = [
     [
     'key'   => 'program',
     'title' => 'Program',
-    'url'   => $basePath . 'program-management/program.php'
+    'url'   => $basePath . 'public/index.php?page=program-management'
     ],
     [
     'key'   => 'schedule',
@@ -20,7 +20,7 @@ $menuItems = [
     [
     'key'   => 'registration',
     'title' => 'Registration',
-    'url'   => $basePath . 'management-regist/managementRegist.php'
+    'url'   => $basePath . 'public/index.php?page=management-registration'
     ],
     [
     'key'   => 'profile',

@@ -29,26 +29,32 @@ class Schedule {
 }
 
     public function create(array $data): bool {
-    $query = "INSERT INTO schedule_management (
-    nama_program, jenis_kategori, status, tanggal_mulai_pendaftaran, tanggal_selesai_pendaftaran, tanggal_pelaksanaan, lokasi, deskripsi) VALUES (
-    :title, :category, :status, :start_date, :end_date, :event_date, :location, :description )";
+    try{
+        $query = "INSERT INTO schedule_management (nama_program, jenis_kategori, status, tanggal_mulai_pendaftaran, tanggal_selesai_pendaftaran, tanggal_pelaksanaan, lokasi, deskripsi) VALUES (
+        :title, :category, :status, :start_date, :end_date, :event_date, :location, :description )";
 
-    $stmt = $this->pdo->prepare($query);
+        $stmt = $this->pdo->prepare($query);
 
-    return $stmt->execute([
-        ':title'=>trim($data['title'] ?? ''),
-        ':category'=>trim($data['category'] ?? 'Lomba'),
-        ':status'=>trim($data['status'] ?? 'Aktif'),
-        ':start_date'=>trim($data['start_date'] ?? ''),
-        ':end_date'=>trim($data['end_date'] ?? ''),
-        ':event_date'=>!empty($data['event_date']) ? trim($data['event_date']) : (trim($data['start_date'] ?? '') ?: date('Y-m-d')),
-        ':location'=>trim($data['location'] ?? ''),
-        ':description'=>trim($data['description'] ?? '')
-    ]);
+        return $stmt->execute([
+            ':title'=>trim($data['title'] ?? ''),
+            ':category'=>trim($data['category'] ?? 'Lomba'),
+            ':status'=>trim($data['status'] ?? 'Aktif'),
+            ':start_date'=>trim($data['start_date'] ?? ''),
+            ':end_date'=>trim($data['end_date'] ?? ''),
+            ':event_date'=>!empty($data['event_date']) ? trim($data['event_date']) : (trim($data['start_date'] ?? '') ?: date('Y-m-d')),
+            ':location'=>trim($data['location'] ?? ''),
+            ':description'=>trim($data['description'] ?? '')
+        ]);
+
+    } catch(PDOException $e) {
+        error_log($e->getMessage());
+        return false;
+    }
 }
 
     public function update(string $id, array $data): bool {
-    $query = "UPDATE schedule_management set
+    try{
+        $query = "UPDATE schedule_management set
                 nama_program = :title,
                 jenis_kategori = :category,
                 status = :status,
@@ -59,26 +65,36 @@ class Schedule {
                 deskripsi = :description
                 where id = :id";
 
-        $stmt = $this->pdo->prepare($query);
+            $stmt = $this->pdo->prepare($query);
 
-        return $stmt->execute ([
-            ':id' => $id,
-            ':title'=>trim($data['title'] ?? ''),
-            ':category'=>trim($data['category'] ?? 'Lomba'),
-            ':status'=>trim($data['status'] ?? 'Aktif'),
-            ':start_date'=>trim($data['start_date'] ?? ''),
-            ':end_date'=>trim($data['end_date'] ?? ''),
-            ':event_date'=>!empty($data['event_date']) ? trim($data['event_date']) : (trim($data['start_date'] ?? '') ?: date('Y-m-d')),
-            ':location'=>trim($data['location'] ?? ''),
-            ':description'=>trim($data['description'] ?? '')
-        ]);
+            return $stmt->execute ([
+                ':id' => $id,
+                ':title'=>trim($data['title'] ?? ''),
+                ':category'=>trim($data['category'] ?? 'Lomba'),
+                ':status'=>trim($data['status'] ?? 'Aktif'),
+                ':start_date'=>trim($data['start_date'] ?? ''),
+                ':end_date'=>trim($data['end_date'] ?? ''),
+                ':event_date'=>!empty($data['event_date']) ? trim($data['event_date']) : (trim($data['start_date'] ?? '') ?: date('Y-m-d')),
+                ':location'=>trim($data['location'] ?? ''),
+                ':description'=>trim($data['description'] ?? '')
+            ]);
+
+        } catch(PDOException $e) {
+            error_log($e->getMessage());
+            return false;
         }
+    }
 
     public function delete(string $id): bool {
+    try{
         $query = "DELETE FROM schedule_management where id = :id";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([':id' => $id]);
         return $stmt->rowCount() > 0;
+    } catch(PDOException $e) {
+        error_log($e->getMessage());
+        return false;
+    }
     }
 
     public function formatTanggalIndo(?string $dateStr): string {
