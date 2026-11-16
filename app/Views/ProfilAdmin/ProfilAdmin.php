@@ -93,7 +93,7 @@
                                 </tr>
                                 <tr>
                                     <td class="col-label">Tanggal Lahir</td>
-                                    <td class="col-value"><?= htmlspecialchars($birthDate) ?></td>
+                                    <td class="col-value"><?= (!empty($birthDate) && $birthDate !== '-')  ? date('d F Y', strtotime($birthDate)) : '-' ?></td>
                                 </tr>
                                 <tr>
                                     <td class="col-label">Jenis Kelamin</td>
@@ -201,7 +201,9 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="inputBirthDate">Tanggal Lahir</label>
-                            <input type="text" id="inputBirthDate" name="birth_date" value="<?= htmlspecialchars($birthDate) ?>" required>
+                            <input type="date" id="inputBirthDate" name="birth_date" 
+                                value="<?= (!empty($birthDate) && $birthDate !== '-') ? date('Y-m-d', strtotime($birthDate)) : '' ?>" 
+                                required>
                         </div>
                         <div class="form-group">
                             <label for="inputGender">Jenis Kelamin</label>

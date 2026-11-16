@@ -75,7 +75,7 @@
     border-radius: 8px;
     font-size: 15px;
     font-weight: 500;
-    color: #475569;
+    color: #718096;
     text-decoration: none;
     transition: all 0.2s ease;
     user-select: none;
@@ -83,7 +83,7 @@
 
 .nav-link:hover {
     color: #1e293b;
-    background-color: #f1f7fa;
+    background-color: #f7fafc;
 }
 
 .nav-link.active {
