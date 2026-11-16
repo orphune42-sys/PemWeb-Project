@@ -1,11 +1,13 @@
 <?php
-class SidebarAdmin {
-    public function getMenuItems(string $baseUrl): array {
+class SidebarAdmin
+{
+    public function getMenuItems(string $baseUrl): array
+    {
         return [
             [
                 'key'   => 'dashboard',
                 'title' => 'Dashboard',
-                'url'   => $baseUrl . '/dashboard-admin/dashboardAdmin.php'
+                'url'   => $baseUrl . '/public/index.php?page=dashboard-admin'
             ],
             [
                 'key'   => 'program',
@@ -20,7 +22,7 @@ class SidebarAdmin {
             [
                 'key'   => 'registration',
                 'title' => 'Registration',
-                'url'   => $baseUrl . '/management-regist/managementRegist.php'
+                'url'   => $baseUrl . '/public/index.php?page=management-regist'
             ],
             [
                 'key'   => 'profile',

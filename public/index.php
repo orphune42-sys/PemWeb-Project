@@ -9,6 +9,7 @@ require_once $projectRoot . '/app/Controllers/AdminProfileController.php';
 require_once $projectRoot . '/app/Controllers/programManagementController.php';
 require_once $projectRoot . '/app/Controllers/OpportunityController.php';
 require_once $projectRoot . '/app/Controllers/MahasiswaProfileController.php';
+require_once $projectRoot . '/app/Controllers/ManagementRegistController.php';
 
 $baseUrl = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/\\');
 $page = $_GET['page'] ?? 'login';
@@ -56,10 +57,13 @@ switch ($page) {
     case 'opportunity':
         (new OpportunityController($pdo, $baseUrl))->index();
         break;
+    case 'management-regist':
+        (new ManagementRegistController($pdo, $baseUrl))->index();
+        break;
     case 'logout':
         (new AuthController($pdo, $baseUrl))->logout();
         break;
-    default:    
+    default:
         http_response_code(404);
         echo 'Halaman tidak ditemukan.';
 }

@@ -1,124 +1,83 @@
-
 <?php
 
 class ManagementRegist
 {
-    public static function getAllRegistrations()
+    private $db;
+
+    public function __construct($pdo)
     {
-        return [
-            [
-                'id' => 1,
-                'nama_mahasiswa' => 'Sarah Cantika',
-                'email' => 'sarahcantika@email.com',
-                'jenis_program' => 'Beasiswa',
-                'status' => 'Approved',
-                'created_at' => '2026-10-13'
-            ],
-            [
-                'id' => 2,
-                'nama_mahasiswa' => 'Mike Rossa',
-                'email' => 'mikeross@email.com',
-                'jenis_program' => 'Beasiswa',
-                'status' => 'Pending',
-                'created_at' => '2026-10-12'
-            ],
-            [
-                'id' => 3,
-                'nama_mahasiswa' => 'Alex Kenandra',
-                'email' => 'alex.ken09@email.com',
-                'jenis_program' => 'Beasiswa',
-                'status' => 'Rejected',
-                'created_at' => '2026-10-11'
-            ],
-            [
-                'id' => 4,
-                'nama_mahasiswa' => 'Jenna Alifia',
-                'email' => 'jenna.altr@email.com',
-                'jenis_program' => 'Lomba',
-                'status' => 'Approved',
-                'created_at' => '2026-10-10'
-            ],
-            [
-                'id' => 5,
-                'nama_mahasiswa' => 'David Pratama',
-                'email' => 'david.234@email.com',
-                'jenis_program' => 'Lomba',
-                'status' => 'Pending',
-                'created_at' => '2026-10-09'
-            ],
-            [
-                'id' => 6,
-                'nama_mahasiswa' => 'Raina Teresa',
-                'email' => 'rainneterrs@email.com',
-                'jenis_program' => 'Lomba',
-                'status' => 'Approved',
-                'created_at' => '2026-10-08'
-            ],
-            [
-                'id' => 7,
-                'nama_mahasiswa' => 'Kania Andriana',
-                'email' => 'kan.09@email.com',
-                'jenis_program' => 'Beasiswa',
-                'status' => 'Approved',
-                'created_at' => '2026-10-07'
-            ],
-            [
-                'id' => 8,
-                'nama_mahasiswa' => 'Bintang Pratama',
-                'email' => 'bintang.pratama@email.com',
-                'jenis_program' => 'Beasiswa',
-                'status' => 'Pending',
-                'created_at' => '2026-10-05'
-            ],
-            [
-                'id' => 9,
-                'nama_mahasiswa' => 'Nabila Putri',
-                'email' => 'nabila.ptr@email.com',
-                'jenis_program' => 'Lomba',
-                'status' => 'Approved',
-                'created_at' => '2026-10-03'
-            ],
-            [
-                'id' => 10,
-                'nama_mahasiswa' => 'Rizky Ramadhan',
-                'email' => 'rizky.rmd@email.com',
-                'jenis_program' => 'Beasiswa',
-                'status' => 'Approved',
-                'created_at' => '2026-09-28'
-            ],
-            [
-                'id' => 11,
-                'nama_mahasiswa' => 'Clarissa Stephanie',
-                'email' => 'clarissa.steph@email.com',
-                'jenis_program' => 'Lomba',
-                'status' => 'Rejected',
-                'created_at' => '2026-09-25'
-            ],
-            [
-                'id' => 12,
-                'nama_mahasiswa' => 'Farhan Hidayat',
-                'email' => 'farhan.hidayat@email.com',
-                'jenis_program' => 'Beasiswa',
-                'status' => 'Pending',
-                'created_at' => '2026-09-20'
-            ],
-            [
-                'id' => 13,
-                'nama_mahasiswa' => 'Amanda Wijaya',
-                'email' => 'amanda.wj@email.com',
-                'jenis_program' => 'Lomba',
-                'status' => 'Approved',
-                'created_at' => '2026-09-15'
-            ],
-            [
-                'id' => 14,
-                'nama_mahasiswa' => 'Dion Kusuma',
-                'email' => 'dion.ksm@email.com',
-                'jenis_program' => 'Beasiswa',
-                'status' => 'Rejected',
-                'created_at' => '2026-09-10'
-            ]
-        ];
+        $this->db = $pdo;
+    }
+
+    // Hitung total pendaftar untuk pagination
+    public function countAll()
+    {
+        $stmt = $this->db->query("SELECT COUNT(*) AS total FROM registrations");
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int)($row['total'] ?? 0);
+    }
+
+    // Ambil daftar pendaftaran dengan pagination & JOIN ke tabel mahasiswa + user
+    public function getPaginated($limit, $offset)
+    {
+        $sql = "SELECT r.*, 
+                       COALESCE(u.name, r.nama_pendaftar) AS display_nama, 
+                       COALESCE(u.email, r.email) AS display_email
+                FROM registrations r
+                LEFT JOIN mahasiswa m ON r.mahasiswa_id = m.id
+                LEFT JOIN user u ON m.user_id = u.id
+                ORDER BY r.created_at DESC
+                LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Tambah data pendaftaran baru
+    public function create($nama, $email, $jenis)
+    {
+        // Cek otomatis apakah email sudah terdaftar di tabel user -> mahasiswa
+        $mahasiswaId = null;
+        $cekMhs = $this->db->prepare("SELECT m.id FROM mahasiswa m JOIN user u ON m.user_id = u.id WHERE u.email = :email LIMIT 1");
+        $cekMhs->execute([':email' => $email]);
+        if ($rowMhs = $cekMhs->fetch(PDO::FETCH_ASSOC)) {
+            $mahasiswaId = (int)$rowMhs['id'];
+        }
+
+        $sql = "INSERT INTO registrations (mahasiswa_id, nama_pendaftar, email, jenis_program, status) 
+                VALUES (:mahasiswa_id, :nama, :email, :jenis, 'Pending')";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([
+            ':mahasiswa_id' => $mahasiswaId,
+            ':nama'         => $nama,
+            ':email'        => $email,
+            ':jenis'        => $jenis
+        ]);
+    }
+
+    // Perbarui data pendaftaran
+    public function update($id, $nama, $email, $jenis)
+    {
+        $sql = "UPDATE registrations 
+                SET nama_pendaftar = :nama, email = :email, jenis_program = :jenis 
+                WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([
+            ':nama'  => $nama,
+            ':email' => $email,
+            ':jenis' => $jenis,
+            ':id'    => (int)$id
+        ]);
+    }
+
+    // Hapus data pendaftaran
+    public function delete($id)
+    {
+        $stmt = $this->db->prepare("DELETE FROM registrations WHERE id = :id");
+        return $stmt->execute([':id' => (int)$id]);
     }
 }
-?>
