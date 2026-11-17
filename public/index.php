@@ -12,12 +12,14 @@ require_once $projectRoot . '/app/Controllers/MahasiswaProfileController.php';
 require_once $projectRoot . '/app/Controllers/ManagementRegistController.php';
 require_once $projectRoot . '/app/Controllers/dashboardUserController.php';
 require_once $projectRoot . '/app/Controllers/DashboardAdminController.php';
+require_once $projectRoot . '/app/Controllers/DetailProgramController.php';
+require_once $projectRoot . '/app/Controllers/PendaftaranController.php';
 
 $baseUrl = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/\\');
 $page = $_GET['page'] ?? 'login';
 
 $publicPages = ['login', 'register'];
-$studentPages = ['explore-program', 'opportunity'];
+$studentPages = ['explore-program', 'opportunity', 'detail-program', 'pendaftaran'];
 $isLoggedIn = isset($_SESSION['user']);
 $userRole = strtolower(trim($_SESSION['user']['role'] ?? ''));
 
@@ -43,6 +45,12 @@ switch ($page) {
         break;
     case 'explore-program':
         (new ExploreProgramController($pdo, $baseUrl))->index();
+        break;
+    case 'detail-program':
+        (new DetailProgramController($pdo, $baseUrl))->index();
+        break;
+    case 'pendaftaran':
+        (new PendaftaranController($pdo, $baseUrl, $projectRoot))->index();
         break;
     case 'schedule':
         (new ScheduleManagementController($baseUrl))->index();

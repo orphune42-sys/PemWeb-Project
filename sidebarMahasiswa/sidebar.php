@@ -20,8 +20,7 @@ $menuItems = [
     [
     'key'   => 'profile',
     'title' => 'Profile',
-    'url'   => $basePath . 'profile-user/profile-user.php'
-    ],
+    'url' => $basePath . 'public/index.php?page=profile-mahasiswa'    ],
 ];
 ?>
 
