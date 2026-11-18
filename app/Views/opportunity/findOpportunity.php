@@ -33,13 +33,15 @@ $totalRecords = count($goals) + count($projects)
 
 $completedGoals = count(array_filter(
     $goals,
-    fn($item) => $item['status'] === 'completed'
+    fn($item) => ($item['status'] ?? '') === 'completed' || (int)($item['progress'] ?? 0) >= 100
 ));
 
 $completedProjects = count(array_filter(
     $projects,
-    fn($item) => $item['status'] === 'completed'
+    fn($item) => ($item['status'] ?? '') === 'completed'
 ));
+
+$formActionUrl = htmlspecialchars($_SERVER['REQUEST_URI'] ?? (($baseUrl ?? '') . '/public/?page=opportunity'));
 ?>
 
 <!DOCTYPE html>
@@ -112,9 +114,7 @@ $completedProjects = count(array_filter(
                 <section class="opportunity-hero">
                     <div class="hero-text">
                         <span class="hero-badge">Personal Growth Planner</span>
-
                         <h2>Kenali Potensimu, Bangun Masa Depanmu!</h2>
-
                         <p>
                             Catat perkembangan dirimu, dokumentasikan pencapaian,
                             dan susun langkah untuk meraih karier impianmu.
@@ -125,7 +125,6 @@ $completedProjects = count(array_filter(
                 </section>
 
                 <section class="summary-grid">
-
                     <div class="summary-card">
                         <div class="summary-icon blue">🎯</div>
                         <div>
@@ -172,29 +171,19 @@ $completedProjects = count(array_filter(
                 </section>
 
                 <nav class="opportunity-tabs">
-
                     <?php $first = true; ?>
-
                     <?php foreach ($sections as $key => $section): ?>
-
                         <button
                             class="tab-btn <?= $first ? 'active' : '' ?>"
                             data-tab="<?= $key ?>">
-
                             <?= htmlspecialchars($section['title']) ?>
-
                         </button>
-
                         <?php $first = false; ?>
-
                     <?php endforeach; ?>
-
                 </nav>
 
                 <?php $first = true; ?>
-
                 <?php foreach ($sections as $key => $section): ?>
-
                     <section
                         class="tab-content <?= $first ? 'active' : '' ?>"
                         id="tab-<?= $key ?>">
@@ -213,14 +202,12 @@ $completedProjects = count(array_filter(
                         </div>
 
                         <div class="record-grid">
-
                             <?php if (!empty($section['records'])): ?>
-
                                 <?php foreach ($section['records'] as $record): ?>
-
                                     <?php
                                     $recordTitle = $record['title']
-                                        ?? $record['target_career']
+                                        ?? $record['project_name']
+                                        ?? $record['career_title']
                                         ?? '';
 
                                     $status = $record['status'] ?? 'completed';
@@ -236,9 +223,8 @@ $completedProjects = count(array_filter(
 
                                         <div class="record-top">
                                             <span class="record-category">
-                                                <?= $section['icon'] ?>
                                                 <?= htmlspecialchars(
-                                                    $record['item_type'] ?? $section['title']
+                                                    $record['category'] ?? $section['title']
                                                 ) ?>
                                             </span>
 
@@ -255,9 +241,9 @@ $completedProjects = count(array_filter(
                                             <?= htmlspecialchars($recordTitle) ?>
                                         </h4>
 
-                                        <?php if (!empty($record['issuer'])): ?>
+                                        <?php if (!empty($record['organizer'])): ?>
                                             <p class="record-subtitle">
-                                                <?= htmlspecialchars($record['issuer']) ?>
+                                                <?= htmlspecialchars($record['organizer']) ?>
                                             </p>
                                         <?php endif; ?>
 
@@ -269,9 +255,7 @@ $completedProjects = count(array_filter(
 
                                         <p class="record-description">
                                             <?= htmlspecialchars(
-                                                $record['description']
-                                                    ?? $record['action_plan']
-                                                    ?? 'Belum ada deskripsi.'
+                                                $record['description'] ?? 'Belum ada deskripsi.'
                                             ) ?>
                                         </p>
 
@@ -299,7 +283,7 @@ $completedProjects = count(array_filter(
                                             </button>
 
                                             <form method="POST"
-                                                action="<?= htmlspecialchars($baseUrl ?? '') ?>/public/?page=find-opportunities"
+                                                action="<?= htmlspecialchars($baseUrl ?? '') ?>/public/index.php?page=opportunity"
                                                 onsubmit="return confirm('Yakin ingin menghapus data ini?')">
 
                                                 <input type="hidden" name="csrf_token"
@@ -363,9 +347,7 @@ $completedProjects = count(array_filter(
                 </button>
             </div>
 
-            <form method="POST"
-                action="<?= htmlspecialchars($baseUrl ?? '') ?>/public/?page=find-opportunities"
-                id="recordForm">
+            <form method="POST" action="<?= htmlspecialchars($baseUrl ?? '') ?>/public/index.php?page=opportunity" id="recordForm">
 
                 <input type="hidden" name="csrf_token"
                     value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
@@ -392,7 +374,7 @@ $completedProjects = count(array_filter(
 
     </div>
 
-    <script src="<?= htmlspecialchars($baseUrl ?? '') ?>/public/js/find-opportunity.js"></script>
+    <script src="<?= htmlspecialchars($baseUrl ?? '') ?>/public/js/find-opportunity.js?v=<?= time() ?>"></script>
 
 </body>
 

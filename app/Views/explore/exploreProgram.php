@@ -104,9 +104,9 @@
                     foreach ($programs as $prog):
                 ?>
                         <div class="program-card"
-                            data-title="<?= strtolower(htmlspecialchars($prog['title'])) ?>"
-                            data-type="<?= strtolower($prog['type']) ?>"
-                            data-category="<?= strtolower($prog['category']) ?>">
+                            data-title="<?= htmlspecialchars(strtolower($prog['title'])) ?>"
+                            data-type="<?= htmlspecialchars(strtolower($prog['type'])) ?>"
+                            data-category="<?= htmlspecialchars(strtolower($prog['category'])) ?>">
                             <div class="card-image">
                                 <img src="<?= htmlspecialchars($prog['image']) ?>" alt="<?= htmlspecialchars($prog['title']) ?>">
                                 <span class="type-badge <?= strtolower($prog['type']) ?>"><?= htmlspecialchars($prog['type']) ?></span>

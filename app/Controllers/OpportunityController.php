@@ -13,7 +13,8 @@ class OpportunityController
         $this->baseUrl = rtrim($baseUrl, '/');
     }
 
-    private function userId(): int {
+    private function userId(): int
+    {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -94,34 +95,34 @@ class OpportunityController
 
         $schemas = [
             'goals' => [
-                'item_type',
-                'title',
-                'description',
-                'target_date',
-                'status'
-            ],
-            'projects' => [
                 'title',
                 'category',
-                'description',
+                'current_level',
+                'target_level',
+                'progress',
+                'target_date',
+                'description'
+            ],
+            'projects' => [
+                'project_name',
+                'category',
+                'technologies',
                 'project_url',
-                'start_date',
-                'end_date',
+                'description',
                 'status'
             ],
             'achievements' => [
                 'title',
-                'issuer',
-                'description',
+                'category',
+                'organizer',
                 'achievement_date',
-                'proof_url'
+                'description',
+                'certificate_file'
             ],
             'career' => [
-                'target_career',
+                'career_title',
+                'description',
                 'target_date',
-                'current_skills',
-                'required_skills',
-                'action_plan',
                 'status'
             ]
         ];
@@ -152,10 +153,10 @@ class OpportunityController
         }
 
         $required = [
-            'goals' => ['item_type', 'title'],
-            'projects' => ['title'],
+            'goals' => ['title', 'category'],
+            'projects' => ['project_name'],
             'achievements' => ['title'],
-            'career' => ['target_career']
+            'career' => ['career_title']
         ];
 
         foreach ($required[$type] as $field) {
@@ -165,17 +166,21 @@ class OpportunityController
         }
 
         $validOptions = [
-            'item_type' => ['goal', 'skill'],
+            'category' => ['Goals', 'Skills'],
             'status' => ['planned', 'in_progress', 'completed']
         ];
 
         foreach ($validOptions as $field => $options) {
+            if ($type === 'goals' && !in_array($data['category'] ?? '', ['Goals', 'Skills'], true)) {
+                exit('Jenis data goals tidak valid.');
+            }
+
             if (
-                isset($data[$field]) &&
-                $data[$field] !== null &&
-                !in_array($data[$field], $options, true)
+                isset($data['status']) &&
+                $data['status'] !== null &&
+                !in_array($data['status'], ['planned', 'in_progress', 'completed'], true)
             ) {
-                exit('Pilihan tidak valid.');
+                exit('Pilihan status tidak valid.');
             }
         }
 

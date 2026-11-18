@@ -55,9 +55,11 @@ class ExploreProgramController
 
     public function index(): void
     {
-        $programModel = new exploreProgram();
-        $programs = $programModel->getAll();
-        $baseUrl = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/\\');
+        $this->userId();
+
+        $programs = $this->model->getAll();
+        $baseUrl = $this->baseUrl;
+
         require __DIR__ . '/../Views/explore/exploreProgram.php';
     }
 }

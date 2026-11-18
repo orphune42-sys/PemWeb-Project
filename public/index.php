@@ -55,7 +55,12 @@ switch ($page) {
         (new programManagementController())->index();
         break;
     case 'opportunity':
-        (new OpportunityController($pdo, $baseUrl))->index();
+        $opportunityController = new OpportunityController($pdo, $baseUrl);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $opportunityController->handleRequest();
+        } else {
+            $opportunityController->index();
+        }
         break;
     case 'management-regist':
         (new ManagementRegistController($pdo, $baseUrl))->index();

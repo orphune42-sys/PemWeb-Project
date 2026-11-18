@@ -24,7 +24,7 @@ class SidebarMahasiswa
             [
                 'key' => 'profile',
                 'title' => 'Profile',
-                'url' => $indexUrl . '?page=profile-user'
+                'url' => $indexUrl . '?page=profile-mahasiswa'
             ],
         ];
     }
