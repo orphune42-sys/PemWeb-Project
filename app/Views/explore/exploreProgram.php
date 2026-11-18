@@ -141,7 +141,7 @@
 
                                 <p class="card-desc"><?= htmlspecialchars($prog['desc']) ?></p>
 
-                                <a href="<?= e($baseUrl) ?>/public/index.php?page=detail-program&id=<?= (int) $prog['id'] ?>" class="detail-link">
+                                <a href="<?= e($baseUrl ?? '') ?>/public/index.php?page=detail-program&id=<?= (int) $prog['id'] ?>" class="detail-link">
                                     Lihat Detail &rarr;
                                 </a>
                             </div>
