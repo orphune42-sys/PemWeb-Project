@@ -12,7 +12,7 @@ class SidebarAdmin
             [
                 'key'   => 'program',
                 'title' => 'Program',
-                'url'   => $baseUrl . '/program-management/program.php'
+                'url'   => $baseUrl . '/public/index.php?page=program-management'
             ],
             [
                 'key'   => 'schedule',

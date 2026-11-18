@@ -1,2 +1,5 @@
 /uploads/pendaftaran/*
 !/uploads/pendaftaran/.htaccess
+.env
+.env.*
+!.env.example
