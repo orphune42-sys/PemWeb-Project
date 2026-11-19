@@ -5,10 +5,12 @@ require_once __DIR__ . '/../Models/programManagementModel.php';
 class programManagementController
 {
     private $model;
+    private string $baseUrl;
 
-    public function __construct()
+    public function __construct($pdo = null, string $baseUrl = '')
     {
         $this->model = new programManagementModel();
+        $this->baseUrl = $baseUrl;
     }
 
     public function index()
@@ -16,12 +18,13 @@ class programManagementController
         $programs = $this->model->getAll();
 
         $stats = [
-            'total' => 48,
-            'active' => 31,
+            'total'    => 48,
+            'active'   => 31,
             'upcoming' => 9,
             'finished' => 8
         ];
 
+        $baseUrl = $this->baseUrl;
         require __DIR__ . '/../Views/program-management/programManagement.php';
     }
 
@@ -61,19 +64,14 @@ class programManagementController
 
     private function validateInput()
     {
-        $name = trim($_POST['name'] ?? '');
-        $organizer = trim($_POST['organizer'] ?? '');
-        $type = $_POST['type'] ?? '';
-        $field = trim($_POST['field'] ?? '');
-        $deadline = $_POST['deadline'] ?? '';
+        $name       = trim($_POST['name'] ?? '');
+        $organizer  = trim($_POST['organizer'] ?? '');
+        $type       = $_POST['type'] ?? '';
+        $field      = trim($_POST['field'] ?? '');
+        $deadline   = $_POST['deadline'] ?? '';
         $registrants = $_POST['registrants'] ?? '';
 
-        $allowedTypes = [
-            'Beasiswa',
-            'Lomba',
-            'Program',
-            'Magang'
-        ];
+        $allowedTypes = ['Beasiswa', 'Lomba', 'Program', 'Magang'];
 
         if (
             $name === '' ||
@@ -89,11 +87,11 @@ class programManagementController
         }
 
         return [
-            'name' => $name,
-            'organizer' => $organizer,
-            'type' => $type,
-            'field' => $field,
-            'deadline' => $deadline,
+            'name'        => $name,
+            'organizer'   => $organizer,
+            'type'        => $type,
+            'field'       => $field,
+            'deadline'    => $deadline,
             'registrants' => (int) $registrants
         ];
     }

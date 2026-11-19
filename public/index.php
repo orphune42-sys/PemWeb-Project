@@ -62,7 +62,7 @@ switch ($page) {
         (new MahasiswaProfileController($pdo, $baseUrl, $projectRoot))->index();
         break;
     case 'program-management':
-        (new programManagementController())->index();
+        (new programManagementController($pdo, $baseUrl))->index();
         break;
     case 'opportunity':
         $opportunityController = new OpportunityController($pdo, $baseUrl);
